@@ -45,7 +45,9 @@ Plane = Class{
     accelerating = false,
     decelerating = false,
 
-    init = function(self, x, y, level)
+    goingRight = true, -- the plane is upside up and going right (or upside down and going left)
+
+    init = function(self, x, y, xDir, yDir, level)
         local density = 50
         PhysicsEntity.init(self, x, y, level, "dynamic", 0.2)
         self.xsize = 4.0 * PIXELS_PER_METER
@@ -54,7 +56,8 @@ Plane = Class{
         PhysicsEntity.attachShape(self, density)
         self.body:setX(self.x + self.xsize / 2)
         self.body:setY(self.y - self.ysize / 2)
-        self.body:setLinearVelocity(100, 0)
+        self.body:setLinearVelocity(xDir, yDir)
+        self.goingRight = xDir >= 0
         self.body:setAngle(0)
         -- self.body:setMassData(self.xsize / 2, self.ysize / 2, 440 * PIXELS_PER_METER, -1.0)
         -- self.body:setMassData(self.xsize / 2, 0, 430, 158194)
@@ -236,9 +239,15 @@ Plane = Class{
         PhysicsEntity.draw(self)
         love.graphics.push()
 
-        love.graphics.translate(self.body:getX(), self.body:getY())
-        love.graphics.scale(-1, 1)
-        love.graphics.draw(self.frames[0], self.quad, 0, 0, -self.angle, 1, 1, self.xsize / 2, self.ysize / 2)
+        if self.goingRight then
+            love.graphics.translate(self.body:getX(), self.body:getY())
+            love.graphics.scale(-1, 1)
+            love.graphics.draw(self.frames[0], self.quad, 0, 0, -self.angle, 1, 1, self.xsize / 2, self.ysize / 2)
+        else
+            love.graphics.translate(self.body:getX(), self.body:getY())
+            love.graphics.draw(self.frames[0], self.quad, 0, 0, self.angle, 1, 1, self.xsize / 2, self.ysize / 2)
+        end
+
         love.graphics.pop()
         drawDebug(debugVectors)
     end;
