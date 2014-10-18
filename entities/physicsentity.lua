@@ -54,7 +54,7 @@ PhysicsEntity = Class{
 
     -- Apply linear impulse with given direction and power
     punch = function(self, angle, power)
-        local forces = deg_dist_to_xy(angle, power)
+        local forces = rad_dist_to_xy(angle, power)
         self.body:applyLinearImpulse(forces[1], forces[2])
     end;
 }

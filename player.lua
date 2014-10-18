@@ -13,6 +13,9 @@ Player = Class{
             ccw = function(down)
                 self.plane:ccw(down)
             end,
+            shoot = function(down)
+                self.plane:shoot(down)
+            end
         }
 
         print(self.name .. ' (' .. self.id .. ') ready for action!')

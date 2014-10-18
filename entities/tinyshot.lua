@@ -2,9 +2,9 @@ Class = require 'hump.class'
 require 'entities/physicsentity'
 require 'settings'
 
-CHAINGUN_SOUND = love.audio.newSource("resources/audio/chaingun.mp3", "static")
+TINYSHOT_SOUND = love.audio.newSource("resources/audio/chaingun.mp3", "static")
 
-Chaingun = Class{
+TinyShot = Class{
     __includes = Rectangle,
 
     MAX_LIFETIME = 60 * 5,
@@ -18,8 +18,8 @@ Chaingun = Class{
         Rectangle.init(self, x, y, level, "dynamic", 0.2, xsize, ysize, 1000, nil)
         self.body:setBullet(true)
 
-        CHAINGUN_SOUND:rewind()
-        CHAINGUN_SOUND:play()
+        TINYSHOT_SOUND:rewind()
+        TINYSHOT_SOUND:play()
     end;
 
     update = function(self, dt)

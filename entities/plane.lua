@@ -4,6 +4,8 @@ require 'settings'
 require 'entities/debug'
 Matrix = require 'matrix'
 VectorLight = require 'hump/vector-light'
+require 'utils'
+require 'machinegun'
 
 local function sign(v)
     if v >= 0 then
@@ -46,12 +48,31 @@ Plane = Class{
         self.angle = 0
 
         self.img = love.graphics.newImage("resources/graphics/box-50x50.png");
-        self.quad = love.graphics.newQuad(0, 0, self.xsize, self.ysize, self.img:getWidth(), self.img:getHeight()) 
+        self.quad = love.graphics.newQuad(0, 0, self.xsize, self.ysize, self.img:getWidth(), self.img:getHeight())
+
+        self.machinegun = MachineGun(self, "vickers77")
     end;
 
-    update = function(self)
+    getGunPosition = function(self)
+        local x = self.body:getX()
+        local y = self.body:getY()
+
+        local pos = rad_dist_to_xy(self.angle, self.xsize / 2)
+        return {x + pos[1], y + pos[2]}
+    end;
+
+    shoot = function(self, down)
+        if down then
+            self.machinegun:startShooting()
+        else
+            self.machinegun:stopShooting()
+        end
+    end;
+
+    update = function(self, dt)
         debugVectors = {}
         PhysicsEntity.update(self, dt)
+        self.machinegun:update(dt)
 
         self.x, self.y = self.fixture:getBoundingBox()
         self.angle = self.body:getAngle()
