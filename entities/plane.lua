@@ -105,12 +105,12 @@ Plane = Class{
 
         local lift_coeff = lift(air_wing_angle)
 
-        print("lift coeff: ", lift_coeff)
+        -- print("lift coeff: ", lift_coeff)
 
         -- motor
         local dx, dy = VectorLight.rotate(self.angle, self.motor_power * 10.0 * PIXELS_PER_METER, 0)
         self.body:applyForce(dx, dy);
-        table.insert(debugVectors, DebugVector(self.body:getX(), self.body:getY(), dx, dy))
+        -- table.insert(debugVectors, DebugVector(self.body:getX(), self.body:getY(), dx, dy))
 
         -- Air friction (and drag?) opposes movement towards plane velocity normal also
         -- hdd drag
