@@ -19,14 +19,14 @@ local lift = function(angle)
     return 1.68429 * math.exp(-math.pow(angle / math.pi * 180.0 -17.3801, 2.0) / (2.0 * math.pow(15.0, 2.0)))
 end
 
-local fwd_frict_coeff = 0.2
+local fwd_frict_coeff = 0.3
 local nor_frict_coeff = 2.0
-local tail_frict_coeff = 0.5
+local tail_frict_coeff = 0.3
 local turn_speed = 2.0
 local wing_lift = 0.1 * 5
 local accel_speed = 1000.0
 local decel_speed = 2000.0
-local max_motorPower = 4000.0
+local max_motorPower = 400.0
 local plane_area = 10.0
 local head_area = 1.0
 
@@ -35,7 +35,7 @@ Plane = Class{
 
     frames = {},
 
-    motorPower = 100,
+    motorPower = 400,
 
     debugVectors = {},
 
@@ -48,15 +48,24 @@ Plane = Class{
     init = function(self, x, y, level)
         local density = 50
         PhysicsEntity.init(self, x, y, level, "dynamic", 0.2)
-        self.xsize = 5.5 * PIXELS_PER_METER
-        self.ysize = 4.0 * PIXELS_PER_METER
+        self.xsize = 4.0 * PIXELS_PER_METER
+        self.ysize = 4.3 * PIXELS_PER_METER
         self.shape = love.physics.newRectangleShape(self.xsize, self.ysize)
         PhysicsEntity.attachShape(self, density)
         self.body:setX(self.x + self.xsize / 2)
         self.body:setY(self.y - self.ysize / 2)
         self.body:setLinearVelocity(100, 0)
         self.body:setAngle(0)
+        -- self.body:setMassData(self.xsize / 2, self.ysize / 2, 440 * PIXELS_PER_METER, -1.0)
+        -- self.body:setMassData(self.xsize / 2, 0, 430, 158194)
+        self.fixture:setFriction(0)
         self.angle = 0
+
+        --x	16	y	17.200000762939	mass	3520	inertia	1942476.875
+        --x	0	y	0	mass	860.00006103516	inertia	158194.140625
+
+        -- local x, y, mass, inertia = self.body:getMassData()
+        print("x", x, "y", y, "mass", mass, "inertia", inertia)
 
         for frame = 0,35 do
             self.frames[frame] = love.graphics.newImage(string.format("resources/graphics/plane-%04d.png", frame))
@@ -188,7 +197,7 @@ Plane = Class{
         -- (*   (Gg.V2.smul (fwd_frict_coeff *. fwd_vel ** 2.0 *. head_area) (V.unit (negate vel))) *)
         -- (*   (to_base (Gg.V2.v 0.0 0.0)); *)
         local airdrag = -fwd_frict_coeff * math.pow(fwd_vel, 2.0) * head_area
-        rel_force("airdrag", airdrag, 0, 0, 0)
+        rel_force("airdrag", airdrag, 0, 0, 0.2 * self.ysize)
 
         -- Air friction (and drag?) opposes movement towards plane velocity normal also
         -- hdd drag
