@@ -103,7 +103,7 @@ Plane = Class{
     end;
 
     update = function(self, dt)
-        debugVectors = {}
+        self.debugVectors = {}
         PhysicsEntity.update(self, dt)
         self.machinegun:update(dt)
 
@@ -140,14 +140,14 @@ Plane = Class{
         local fwd_vel = VectorLight.dot(vel_x, vel_y, fwd_x, fwd_y)
         local normal_vel = VectorLight.dot(vel_x, vel_y, normal_x, normal_y)
         -- print("fwd_vel", fwd_vel, "normal_vel", normal_vel, "vel_x", vel_x, "vel_y", vel_y, "normal_x", normal_x, "normal_y", normal_y)
-        table.insert(debugVectors, DebugVector("vel", self.body:getX(), self.body:getY(), vel_x, vel_y))
-        table.insert(debugVectors, DebugVector("fwd", self.body:getX(), self.body:getY(), fwd_x, fwd_y))
-        table.insert(debugVectors, DebugVector("normal", self.body:getX(), self.body:getY(), normal_x, normal_y))
+        table.insert(self.debugVectors, DebugVector("vel", self.body:getX(), self.body:getY(), vel_x, vel_y))
+        table.insert(self.debugVectors, DebugVector("fwd", self.body:getX(), self.body:getY(), fwd_x, fwd_y))
+        table.insert(self.debugVectors, DebugVector("normal", self.body:getX(), self.body:getY(), normal_x, normal_y))
 
         local tail_speed = self.body:getAngularVelocity() * math.pi * 2.0 * self.xsize / 2.0
         local tail_vel = to_base(0, tail_speed) -- hmm?! not tail_speed, 0?
         local abs_tail_vel_x, abs_tail_vel_y = VectorLight.add(vel_x, vel_y, tail_vel[1][1], tail_vel[2][1])
-        table.insert(debugVectors, DebugVector("tail", self.body:getX(), self.body:getY(), tail_vel[1][1], tail_vel[2][1]))
+        table.insert(self.debugVectors, DebugVector("tail", self.body:getX(), self.body:getY(), tail_vel[1][1], tail_vel[2][1]))
         --print("absolute tail veloicty: ", abs_tail_vel_x, abs_tail_vel_y)
 
         local head_angle = self.angle
@@ -168,7 +168,7 @@ Plane = Class{
             -- print("base_force", base_force[1][1], base_force[2][1])
             -- print("base_force'", Matrix.tostring(base_force))
 
-            table.insert(debugVectors, DebugVector(label, base_rel_at_x, base_rel_at_y, base_force[1][1], base_force[2][1]))
+            table.insert(self.debugVectors, DebugVector(label, base_rel_at_x, base_rel_at_y, base_force[1][1], base_force[2][1]))
         end
         
         local speed_angle
@@ -194,7 +194,7 @@ Plane = Class{
         -- motor
         local dx, dy = VectorLight.rotate(self.angle, self.motorPower * 10.0 * PIXELS_PER_METER, 0)
         self.body:applyForce(dx, dy);
-        -- table.insert(debugVectors, DebugVector(self.body:getX(), self.body:getY(), dx, dy))
+        -- table.insert(self.debugVectors, DebugVector(self.body:getX(), self.body:getY(), dx, dy))
 
         -- (* self#add_force "fwddrag" *)
         -- (*   (Gg.V2.smul (fwd_frict_coeff *. fwd_vel ** 2.0 *. head_area) (V.unit (negate vel))) *)
@@ -230,9 +230,9 @@ Plane = Class{
         end
         -- print(dx, dy)
 
-        -- table.insert(debugVectors, DebugVector(self.x + width / 2, self.y + height / 2, 0, -100))
-        -- table.insert(debugVectors, DebugVector(self.x, self.y, -100, 0))
-        -- table.insert(debugVectors, DebugVector(self.x + 55, self.y + 10, dx, dy)
+        -- table.insert(self.debugVectors, DebugVector(self.x + width / 2, self.y + height / 2, 0, -100))
+        -- table.insert(self.debugVectors, DebugVector(self.x, self.y, -100, 0))
+        -- table.insert(self.debugVectors, DebugVector(self.x + 55, self.y + 10, dx, dy)
     end;
 
     draw = function(self)
@@ -249,7 +249,7 @@ Plane = Class{
         end
 
         love.graphics.pop()
-        drawDebug(debugVectors)
+        drawDebug(self.debugVectors)
     end;
 
     cw = function(self, isTurning)
