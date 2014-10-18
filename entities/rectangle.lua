@@ -33,7 +33,7 @@ Rectangle = Class{
     draw = function(self)
         PhysicsEntity.draw(self)
         if self.img ~= nil then
-            love.graphics.drawq(self.img, self.quad, self.body:getX(), self.body:getY(), self.angle, 1, 1, self.xsize / 2, self.ysize / 2)
+            love.graphics.draw(self.img, self.quad, self.body:getX(), self.body:getY(), self.angle, 1, 1, self.xsize / 2, self.ysize / 2)
         else
             love.graphics.rectangle("fill", self.x, self.y, self.xsize, self.ysize)
         end
