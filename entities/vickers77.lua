@@ -2,6 +2,8 @@ Class = require 'hump.class'
 require 'entities/physicsentity'
 require 'settings'
 
+VICKERS_SOUND = love.audio.newSource("resources/audio/vickers77.mp3", "static")
+
 Vickers77 = Class{
     __includes = Rectangle,
 
@@ -15,6 +17,9 @@ Vickers77 = Class{
 
         Rectangle.init(self, x, y, level, "dynamic", 0.2, xsize, ysize, 1000, nil)
         self.body:setBullet(true)
+
+        VICKERS_SOUND:rewind()
+        VICKERS_SOUND:play()
     end;
 
     update = function(self, dt)
