@@ -139,10 +139,10 @@ function begin_contact(a, b, coll)
             aObj.deleteLater = true
             bObj:setPowerUpMode(ChaingunMode())
         else
-            if aObj:isinstance(Plane) then
+            if aObj:isinstance(Plane) and (bObj:getOwner() == nil or bObj:getOwner().id ~= aObj.id) then
                 aObj:receiveDamage(1000);
             end
-            if bObj:isinstance(Plane) then
+            if bObj:isinstance(Plane) and (aObj:getOwner() == nil or aObj:getOwner().id ~= bObj.id) then
                 bObj:receiveDamage(1000);
             end
         end

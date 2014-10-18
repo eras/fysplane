@@ -50,6 +50,7 @@ MachineGun = Class{
         local level = self.plane.level
 
         local shot = self.gun['projectile'](gunPos[1], gunPos[2], level)
+        shot:setOwner(self.plane);
         local angle = self.plane.body:getAngle()
         shot.body:setAngle(angle)
         shot:punch(angle, self.gun['force'])

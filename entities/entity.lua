@@ -10,11 +10,20 @@ Entity = Class{
         self.x = x
         self.y = y
         self.level = level
+        self.owner = nil
 
         self.id = entity_id
         entity_id = entity_id + 1
 
         self.level.entity_list[self.id] = self
+    end;
+
+    setOwner = function(self, owner)
+        self.owner = owner
+    end;
+
+    getOwner = function(self)
+        return self.owner
     end;
 
     draw = function(self)
