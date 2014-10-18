@@ -75,9 +75,10 @@ Plane = Class{
         end
         self.quad = love.graphics.newQuad(0, 0, self.xsize, self.ysize, self.frames[0]:getWidth(), self.frames[0]:getHeight())
 
-        self.machinegun = MachineGun(self, "vickers77")
+        self.machinegun = MachineGun(self, PLANE_DEFAULT_GUN)
 
         self.health = PLANE_HEALTH
+        self.powerupmode = nil
     end;
 
     getGunPosition = function(self)
@@ -86,6 +87,11 @@ Plane = Class{
 
         local pos = rad_dist_to_xy(self.angle, self.xsize / 2)
         return {x + pos[1], y + pos[2]}
+    end;
+
+    setPowerUpMode = function(self, powerupmode)
+        self.powerupmode = powerupmode
+        self.powerupmode:activate(self)
     end;
 
     accelerate = function(self, down)
@@ -108,6 +114,10 @@ Plane = Class{
         self.debugVectors = {}
         PhysicsEntity.update(self, dt)
         self.machinegun:update(dt)
+
+        if self.powerupmode ~= nil then
+            self.powerupmode:update(dt)
+        end
 
         self.x, self.y = self.fixture:getBoundingBox()
         self.angle = self.body:getAngle()

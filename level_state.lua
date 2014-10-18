@@ -2,6 +2,9 @@ Gamestate = require 'hump.gamestate'
 require 'level'
 require 'player'
 require 'scoreboard'
+require 'entities/chaingunpowerup'
+require 'entities/plane'
+require 'chaingunmode'
 
 level_state = {}
 
@@ -15,6 +18,8 @@ local scoreboards = {}
 local level_music = nil
 local current_level = nil
 local paused = false
+
+local POWERUP_POSSIBILITY = 0.001
 
 function level_state:init()
 end
@@ -33,6 +38,7 @@ function level_state:enter(previous, level_file)
     current_level.world:setCallbacks(begin_contact, end_contact, pre_solve, post_solve)
 
     players[1]:setPlane(current_level:getPlane(1))
+    players[2]:setPlane(current_level:getPlane(2))
 
     -- Set up scoreboards
     for i = 1, #players, 1 do
@@ -41,6 +47,8 @@ function level_state:enter(previous, level_file)
 
         scoreboards[i] = Scoreboard(x, 20, players[i])
     end
+
+    ChaingunPowerUp(750, 750, current_level)
 end
 
 
@@ -59,6 +67,15 @@ function level_state:update(dt)
     if current_level.reset == true then
         resetLevel()
         return
+    end
+
+    -- Generate powerups
+    local r = love.math.random()
+
+    if r <= POWERUP_POSSIBILITY then
+        local x = love.math.random(love.window.getWidth())
+        local y = love.math.random(love.window.getHeight())
+        ChaingunPowerUp(x, y, current_level)
     end
 
     if not paused then
@@ -110,7 +127,18 @@ function level_state:mousepressed(x, y, button)
 end
 
 function begin_contact(a, b, coll)
+    local aObj = a:getUserData()
+    local bObj = b:getUserData()
 
+    if aObj ~= nil and bObj ~= nil then
+        if aObj:isinstance(Plane) and bObj:isinstance(ChaingunPowerUp) then
+            bObj.deleteLater = true
+            aObj:setPowerUpMode(ChaingunMode())
+        elseif bObj:isinstance(Plane) and aObj:isinstance(ChaingunPowerUp) then
+            aObj.deleteLater = true
+            bObj:setPowerUpMode(ChaingunMode())
+        end
+    end
 end
 
 function end_contact(a, b, coll)

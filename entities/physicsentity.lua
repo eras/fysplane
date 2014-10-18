@@ -10,6 +10,7 @@ PhysicsEntity = Class{
         self.physicsType = physics_type
         self.main_color = main_color
         self.restitution = restitution
+        self.deleteLater = false
 
         self:initPhysics(self)
     end;
@@ -37,6 +38,11 @@ PhysicsEntity = Class{
 
     -- Only update if physics is not static
     update = function(self, dt)
+        if self.deleteLater then
+            self:delete()
+            return
+        end
+
         if self.physicsType ~= "static" then
             self.x = self.body:getX()
             self.y = self.body:getY()
