@@ -7,7 +7,7 @@ require 'settings'
 -- specific data like global physics
 
 -- Reset color to this before drawing each object
-draw_base_color = {255, 255, 255, 255}
+local draw_base_color = {255, 255, 255, 255}
 
 Level = Class{
     init = function(self)
@@ -15,7 +15,7 @@ Level = Class{
         self.entity_list = {}
 
         self.world = love.physics.newWorld(GRAVITY_X, GRAVITY_Y, true)
-        
+
         -- Draw background  to canvas so we don't redraw it every time
         self.background = love.graphics.newImage('resources/graphics/sky.png')
         self.bgCanvas = love.graphics.newCanvas()
@@ -45,13 +45,16 @@ Level = Class{
     end;
 
     drawEntities = function(self)
-        love.graphics.draw(self.bgCanvas)
-
         for key, entity in pairs(self.entity_list) do
             love.graphics.setColor(draw_base_color)
             entity:draw()
         end
         love.graphics.setColor(draw_base_color)
+    end;
+
+    drawBackground = function(self)
+        love.graphics.setColor(draw_base_color)
+        love.graphics.draw(self.bgCanvas)
     end;
 
     updateEntities = function(self, dt)

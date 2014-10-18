@@ -1,6 +1,7 @@
 Gamestate = require 'hump.gamestate'
 require 'level'
 require 'player'
+require 'scoreboard'
 
 level_state = {}
 
@@ -8,6 +9,8 @@ local players = {
     [1] = Player(1, 'flux'),
     [2] = Player(2, 'Nicd')
 }
+
+local scoreboards = {}
 
 local level_music = nil
 local current_level = nil
@@ -30,10 +33,24 @@ function level_state:enter(previous, level_file)
     current_level.world:setCallbacks(begin_contact, end_contact, pre_solve, post_solve)
 
     players[1]:setPlane(current_level:getPlane(1))
+
+    -- Set up scoreboards
+    for i = 1, #players, 1 do
+        local i0 = i - 1
+        local x = 20 + (i0 * SCOREBOARD_WIDTH) + (i0 * SCOREBOARD_MARGIN)
+
+        scoreboards[i] = Scoreboard(x, 20, players[i])
+    end
 end
 
 
 function level_state:draw()
+    current_level:drawBackground()
+
+    for i = 1, #scoreboards, 1 do
+        scoreboards[i]:draw()
+    end
+
     current_level:drawEntities()
 end
 

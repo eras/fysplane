@@ -24,6 +24,8 @@ Player = Class{
             end
         }
 
+        self.score = 0
+
         print(self.name .. ' (' .. self.id .. ') ready for action!')
     end;
 

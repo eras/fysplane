@@ -76,6 +76,8 @@ Plane = Class{
         self.quad = love.graphics.newQuad(0, 0, self.xsize, self.ysize, self.frames[0]:getWidth(), self.frames[0]:getHeight())
 
         self.machinegun = MachineGun(self, "vickers77")
+
+        self.health = PLANE_HEALTH
     end;
 
     getGunPosition = function(self)

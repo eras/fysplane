@@ -75,3 +75,15 @@ function getObjectsInRadius(x, y, radius, level, include_player)
 
     return ret
 end
+
+-- Pick a color from a color slide, from rgb0 (0%) to rgb100 (100%)
+function colorSlide(rgb0, rgb100, ratio)
+    local red = colorNAKKIVENE(rgb0[1], rgb100[1], ratio)
+    local green = colorNAKKIVENE(rgb0[2], rgb100[2], ratio)
+    local blue = colorNAKKIVENE(rgb0[3], rgb100[3], ratio)
+    return {red, green, blue}
+end
+
+function colorNAKKIVENE(color100, color0, ratio)
+    return ratio * color100 + (1 - ratio) * color0
+end
