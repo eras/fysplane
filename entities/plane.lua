@@ -123,13 +123,14 @@ Plane = Class{
         self.body:applyForce(lift_x, lift_y, self.body:getX(), self.body:getY())
 
         if self.turningCcw then
-            dx, dy = VectorLight.rotate(self.angle - math.pi / 2, 1000, 0)
+            dx, dy = VectorLight.rotate(self.angle, 0, 50000)
         elseif self.turningCw then
-            dx, dy = VectorLight.rotate(self.angle - math.pi / 2, -1000, 0)
+            dx, dy = VectorLight.rotate(self.angle, 0, -50000)
         end
         local rdx, rdy = VectorLight.rotate(self.angle, self.xsize / 2, 0)
         self.body:applyForce(dx, dy, self.body:getX() + rdx, self.body:getY() + rdy)
         table.insert(debugVectors, DebugVector(self.body:getX() + rdx, self.body:getY() + rdy, dx, dy))
+        -- print(dx, dy)
 
         -- table.insert(debugVectors, DebugVector(self.x + width / 2, self.y + height / 2, 0, -100))
         -- table.insert(debugVectors, DebugVector(self.x, self.y, -100, 0))
