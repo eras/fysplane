@@ -1,5 +1,6 @@
 Gamestate = require 'hump.gamestate'
 require 'menu_state'
+require 'level_state'
 
 -- Initialize game global variables and switch to menu state
 
@@ -12,7 +13,7 @@ function love.load()
     love.physics.setMeter(30)
 
     Gamestate.registerEvents()
-    Gamestate.switch(menu_state)
+    Gamestate.switch(level_state)
 end
 
 function love.quit()
