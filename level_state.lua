@@ -1,10 +1,17 @@
 Gamestate = require 'hump.gamestate'
 require 'level'
+require 'player'
+require 'entities/vickers77'
 
 level_state = {}
 
-players = {}
-level_music = nil
+local players = {
+    [1] = Player(1, 'flux'),
+    [2] = Player(2, 'Nicd')
+}
+
+local level_music = nil
+local current_level = nil
 
 function level_state:init()
 end
@@ -50,6 +57,8 @@ function level_state:leave(bool)
 end
 
 function level_state:keypressed(key, unicode)
+    print('Somebody pressed ' .. key)
+
     -- Ctrl + R restarts current level.
     if key == "r"
        and (love.keyboard.isDown("lctrl")
@@ -57,13 +66,23 @@ function level_state:keypressed(key, unicode)
 
         current_level.reset = true
     else
-        -- Do something
+        for id, player in pairs(players) do
+            player:press(key)
+        end
     end
+
+    local shot = Vickers77(200, 700, current_level)
+    shot:setAngle(-89)
+    shot:punch(-89, 10000)
 end
 
 
 function level_state:keyreleased(key, unicode)
+    print('Somebody released ' .. key)
 
+   for id, player in pairs(players) do
+        player:release(key)
+    end
 end
 
 

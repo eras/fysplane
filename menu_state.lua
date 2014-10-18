@@ -1,5 +1,4 @@
 Gamestate = require 'hump.gamestate'
-Class = require 'hump.class'
 
 menu_state = {}
 

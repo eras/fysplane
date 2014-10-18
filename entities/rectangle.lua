@@ -23,7 +23,7 @@ Rectangle = Class{
         end
     end;
 
-    update = function(self)
+    update = function(self, dt)
         PhysicsEntity.update(self, dt)
 
         self.x, self.y = self.fixture:getBoundingBox()
@@ -35,8 +35,16 @@ Rectangle = Class{
         if self.img ~= nil then
             love.graphics.draw(self.img, self.quad, self.body:getX(), self.body:getY(), self.angle, 1, 1, self.xsize / 2, self.ysize / 2)
         else
-            love.graphics.rectangle("fill", self.x, self.y, self.xsize, self.ysize)
+            love.graphics.push()
+            love.graphics.translate(self.body:getX(), self.body:getY())
+            love.graphics.rotate(self.angle)
+            love.graphics.rectangle("fill", -self.xsize / 2, -self.ysize / 2, self.xsize, self.ysize)
+            love.graphics.pop()
         end
+    end;
+
+    setAngle = function(self, angle)
+        self.body:setAngle(deg_to_rad(angle))
     end;
 }
 
