@@ -26,7 +26,7 @@ local turn_speed = 2.0
 local wing_lift = 0.1 * 5
 local accel_speed = 1000.0
 local decel_speed = 2000.0
-local max_motorPower = 400.0
+local max_motorPower = ENGINE_MAX
 local plane_area = 10.0
 local head_area = 1.0
 

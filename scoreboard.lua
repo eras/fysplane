@@ -34,5 +34,11 @@ Scoreboard = Class{
         local end_color = {255, 0, 0}
         love.graphics.setColor(colorSlide(start_color, end_color, health_ratio))
         love.graphics.rectangle("fill", self.x + SCOREBOARD_MARGIN, self.y + SCOREBOARD_MARGIN + 45, (SCOREBOARD_WIDTH - 2 * SCOREBOARD_MARGIN) * health_ratio, 20)
+
+        local engine_ratio = self.player.plane.motorPower / ENGINE_MAX
+        local start_color = {0, 255, 0}
+        local end_color = {255, 0, 0}
+        love.graphics.setColor(colorSlide(start_color, end_color, engine_ratio))
+        love.graphics.rectangle("fill", self.x + SCOREBOARD_MARGIN, self.y + SCOREBOARD_MARGIN + 70, (SCOREBOARD_WIDTH - 2 * SCOREBOARD_MARGIN) * engine_ratio, 20)
     end;
 }
