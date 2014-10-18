@@ -1,5 +1,6 @@
 Class = require 'hump.class'
 require 'entities/rectangle'
+require 'entities/plane'
 require 'settings'
 
 -- A level manages the level datastructure containing static blocks and level
@@ -17,7 +18,7 @@ Level = Class{
 
         self.world = love.physics.newWorld(GRAVITY_X, GRAVITY_Y, true)
 
-        Rectangle(100, 100, self, "dynamic", 0.1, 50, 50, 1, love.graphics.newImage("resources/graphics/box-50x50.png"))
+        Plane(100, 100, self)
         Rectangle(70, 250, self, "static", 0.1, 50, 50, 1, love.graphics.newImage("resources/graphics/box-50x50.png"))
     end;
 
