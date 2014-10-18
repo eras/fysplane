@@ -2,7 +2,7 @@ Class = require 'hump.class'
 require 'entities/physicsentity'
 require 'settings'
 
-TINYSHOT_SOUND = love.audio.newSource("resources/audio/chaingun.mp3", "static")
+local TINYSHOT_SOUND = love.audio.newSource("resources/audio/chaingun.mp3", "static")
 
 TinyShot = Class{
     __includes = Rectangle,

@@ -2,7 +2,7 @@ Class = require 'hump.class'
 require 'entities/physicsentity'
 require 'settings'
 
-VICKERS_SOUND = love.audio.newSource("resources/audio/vickers77.mp3", "static")
+local VICKERS_SOUND = love.audio.newSource("resources/audio/vickers77.mp3", "static")
 
 Vickers77 = Class{
     __includes = Rectangle,
