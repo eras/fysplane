@@ -52,8 +52,8 @@ end
 function level_state:keypressed(key, unicode)
     -- Ctrl + R restarts current level.
     if key == "r"
-       and ( love.keyboard.isDown("lctrl")
-       or love.keyboard.isDown("rctrl") ) then
+       and (love.keyboard.isDown("lctrl")
+       or love.keyboard.isDown("rctrl")) then
 
         current_level.reset = true
     else

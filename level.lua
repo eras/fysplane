@@ -20,6 +20,7 @@ Level = Class{
 
         Plane(100, 100, self)
         Rectangle(70, 250, self, "static", 0.1, 50, 50, 1, love.graphics.newImage("resources/graphics/box-50x50.png"))
+        self:insertGround()
     end;
 
     delete = function(self)
@@ -46,6 +47,14 @@ Level = Class{
 
         for key, entity in pairs(self.entity_list) do
             entity:update(dt)
+        end
+    end;
+
+    insertGround = function(self)
+        groundImg = love.graphics.newImage('tiles/grasstop.png')
+
+        for i = 0, love.window.getWidth() / 16 + 1, 1 do
+            Rectangle(i * 16, love.window.getHeight(), self, "static", 0, 16, 16, 0, groundImg)
         end
     end;
 }

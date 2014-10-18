@@ -5,7 +5,7 @@ function love.conf(t)
     t.modules.joystick = false
 
     t.window.title = "Fysplane"
-    t.window.width = 1024
+    t.window.width = 1280
     t.window.height = 768
     t.window.resizable = false
 
