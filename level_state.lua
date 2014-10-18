@@ -105,3 +105,7 @@ end
 function end_solve(a, b, coll)
 
 end
+
+function resetLevel()
+    Gamestate.switch(level_state)
+end

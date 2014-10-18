@@ -14,9 +14,14 @@ Level = Class{
         self.name = 'Default'
         self.entity_list = {}
 
-        self.backgroundColor = {135, 206, 250, 255}
-
         self.world = love.physics.newWorld(GRAVITY_X, GRAVITY_Y, true)
+        
+        -- Draw background  to canvas so we don't redraw it every time
+        self.background = love.graphics.newImage('resources/graphics/sky.png')
+        self.bgCanvas = love.graphics.newCanvas()
+        love.graphics.setCanvas(self.bgCanvas)
+        love.graphics.draw(self.background)
+        love.graphics.setCanvas()
 
         Plane(100, 100, self)
         Rectangle(70, 250, self, "static", 0.1, 50, 50, 1, love.graphics.newImage("resources/graphics/box-50x50.png"))
@@ -35,6 +40,8 @@ Level = Class{
     end;
 
     drawEntities = function(self)
+        love.graphics.draw(self.bgCanvas)
+
         for key, entity in pairs(self.entity_list) do
             love.graphics.setColor(draw_base_color)
             entity:draw()
