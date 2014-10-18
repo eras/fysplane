@@ -17,8 +17,7 @@ Level = Class{
 
         self.world = love.physics.newWorld(GRAVITY_X, GRAVITY_Y, true)
 
-        Rectangle(100, 100, self, "dynamic", 0.1, 50, 50, 1, love.graphics.newImage("resources/graphics/box-50x50.png"))
-        Rectangle(70, 250, self, "static", 0.1, 50, 50, 1, love.graphics.newImage("resources/graphics/box-50x50.png"))
+        self:insertGround()
     end;
 
     delete = function(self)
@@ -45,6 +44,14 @@ Level = Class{
 
         for key, entity in pairs(self.entity_list) do
             entity:update(dt)
+        end
+    end;
+
+    insertGround = function(self)
+        groundImg = love.graphics.newImage('tiles/grasstop.png')
+
+        for i = 0, 64, 1 do
+            Rectangle(i * 16, 768, self, "static", 0, 16, 16, 0, groundImg)
         end
     end;
 }
