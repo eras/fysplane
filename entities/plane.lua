@@ -234,6 +234,9 @@ Plane = Class{
         local lift_x, lift_y = VectorLight.mul(wing_lift * math.pow(fwd_vel, 2.0) * lift_coeff, 0, -1)
         rel_force("lift", lift_x, lift_y, self.xsize * 0.8, 0)
 
+        local tail_frict = tail_frict_coeff * math.pow(tail_speed, 2.0) * sign(tail_speed)
+        rel_force("tf", 0, tail_frict, -self.xsize / 2, 0)
+
         -- if self.turningCcw then
         --     dx, dy = VectorLight.rotate(self.angle, 0, 50000)
         -- elseif self.turningCw then
