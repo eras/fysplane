@@ -57,7 +57,7 @@ function level_state:keypressed(key, unicode)
 
         current_level.reset = true
     else
-        -- Do stuff
+        player:keypressed(key)
     end
 end
 
