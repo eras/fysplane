@@ -15,6 +15,12 @@ Player = Class{
             end,
             shoot = function(down)
                 self.plane:shoot(down)
+            end,
+            accelerate = function(down)
+                self.plane:accelerate(down)
+            end,
+            decelerate = function(down)
+                self.plane:decelerate(down)
             end
         }
 
