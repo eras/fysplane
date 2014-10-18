@@ -11,6 +11,7 @@ local players = {
 
 local level_music = nil
 local current_level = nil
+local paused = false
 
 function level_state:init()
 end
@@ -43,7 +44,9 @@ function level_state:update(dt)
         return
     end
 
-    current_level:updateEntities(dt)
+    if not paused then
+        current_level:updateEntities(dt)
+    end
 end
 
 
@@ -66,6 +69,8 @@ function level_state:keypressed(key, unicode)
        or love.keyboard.isDown("rctrl")) then
 
         current_level.reset = true
+    elseif key == " " then
+        paused = not paused
     else
         for id, player in pairs(players) do
             player:press(key)
