@@ -15,26 +15,33 @@ local function sign(v)
     end
 end
 
+local lift = function(angle) 
+    return 1.68429 * math.exp(-math.pow(angle / math.pi * 180.0 -17.3801, 2.0) / (2.0 * math.pow(15.0, 2.0)))
+end
+
 local fwd_frict_coeff = 0.2
 local nor_frict_coeff = 2.0
 local tail_frict_coeff = 0.5
-local head_area = 1.0
-local plane_area = 10.0
-local tail_area = 0.2
-local turn_speed = 0.2
+local turn_speed = 0.2 * 1000
 local wing_lift = 0.1
+local accel_speed = 1000.0
+local decel_speed = 2000.0
+local max_motorPower = 4000.0
 
 Plane = Class{
     __includes = PhysicsEntity,
 
     img = nil,
 
-    motor_power = 500,
+    motorPower = 0,
 
     debugVectors = {},
 
     turningCw = false,
     turningCcw = false,
+
+    accelerating = false,
+    decelerating = false,
 
     init = function(self, x, y, level)
         local density = 50
@@ -45,6 +52,7 @@ Plane = Class{
         PhysicsEntity.attachShape(self, density)
         self.body:setX(self.x + self.xsize / 2)
         self.body:setY(self.y - self.ysize / 2)
+        self.body:setAngle(math.pi / 2)
         self.angle = 0
 
         self.img = love.graphics.newImage("resources/graphics/box-50x50.png");
@@ -59,6 +67,14 @@ Plane = Class{
 
         local pos = rad_dist_to_xy(self.angle, self.xsize / 2)
         return {x + pos[1], y + pos[2]}
+    end;
+
+    accelerate = function(self, down)
+        self.accelerating = down
+    end;
+
+    decelerate = function(self, down)
+        self.decelerating = down
     end;
 
     shoot = function(self, down)
@@ -78,30 +94,64 @@ Plane = Class{
         self.angle = self.body:getAngle()
 
         local vel_x, vel_y = self.body:getLinearVelocity()
-        local abs_vel = VectorLight.len2(vel_x, vel_y)
+        local abs_vel = VectorLight.len(vel_x, vel_y)
+
+        if self.accelerating then 
+            self.motorPower = math.min(max_motorPower, self.motorPower + dt * accel_speed)
+        end
+        if self.decelerating then
+            self.motorPower = math.max(0.0, self.motorPower - dt * accel_speed)
+        end
 
         -- -- local base = 
         -- let base = V.base (V.vec_of_ang (~-(body#get_angle))) in
-        local base = Matrix{{math.cos(-self.angle), math.sin(-self.angle)}, {math.cos(-self.angle + math.pi / 2), math.sin(-self.angle + math.pi / 2)}}
+        local basde = Matrix{{math.cos(-self.angle),
+                             math.sin(-self.angle)},
+                            {math.cos(-self.angle + math.pi / 2),
+                             math.sin(-self.angle + math.pi / 2)}}
         local to_base = function(x, y) 
-            return Matrix.mul(Matrix{{x}, {y}}, base)
+            local m = Matrix.mul(basde, Matrix{{x}, {y}})
+            -- print("to_base", x, y, "->", Matrix.tostring(m), " = ", m[1][1], m[2][1])
+            return m
         end
+
+        -- print("-")
+        -- print(Matrix.tostring(base))
         
         local fwd_x, fwd_y = VectorLight.rotate(self.angle, 1, 0)
-        local normal_x, normal_y = VectorLight.rotate(self.angle, 0, 1)
-        local normal_unit_x, normal_unit_y = VectorLight.div(VectorLight.len(normal_x, normal_y), normal_x, normal_y)
+        local normal_x, normal_y = VectorLight.perpendicular(fwd_x, fwd_y)
         local fwd_vel = VectorLight.dot(vel_x, vel_y, fwd_x, fwd_y)
         local normal_vel = VectorLight.dot(vel_x, vel_y, normal_x, normal_y)
+        -- print("fwd_vel", fwd_vel, "normal_vel", normal_vel, "vel_x", vel_x, "vel_y", vel_y, "normal_x", normal_x, "normal_y", normal_y)
+        table.insert(debugVectors, DebugVector("vel", self.body:getX(), self.body:getY(), vel_x, vel_y))
+        table.insert(debugVectors, DebugVector("fwd", self.body:getX(), self.body:getY(), fwd_x, fwd_y))
+        table.insert(debugVectors, DebugVector("normal", self.body:getX(), self.body:getY(), normal_x, normal_y))
 
         local tail_speed = self.body:getAngularVelocity() * math.pi * 2.0 * self.xsize / 2.0
         local tail_vel = to_base(0, tail_speed) -- hmm?! not tail_speed, 0?
         local abs_tail_vel_x, abs_tail_vel_y = VectorLight.add(vel_x, vel_y, tail_vel[1][1], tail_vel[2][1])
+        table.insert(debugVectors, DebugVector("tail", self.body:getX(), self.body:getY(), tail_vel[1][1], tail_vel[2][1]))
         --print("absolute tail veloicty: ", abs_tail_vel_x, abs_tail_vel_y)
 
         local head_angle = self.angle
 
-        local rel_force = function(label, force, at)
-            self.body:applyForce(force, at)
+        local rel_force = function(label, force_x, force_y, rel_at_x, rel_at_y)
+            -- rdx, rdy = VectorLight.add(rdx, rdy, self.body:getX(), self.body:getY())
+            local base_force = to_base(force_x, force_y)
+            local base_rel_at = to_base(rel_at_x, rel_at_y)
+            base_rel_at_x, base_rel_at_y = VectorLight.add(base_rel_at[1][1], base_rel_at[2][1], self.body:getX(), self.body:getY())
+            self.body:applyForce(base_force[1][1], base_force[2][1], base_rel_at_x, base_rel_at_y)
+
+            at_x, at_y = VectorLight.add(base_rel_at_x, base_rel_at_y, base_force[1][1], base_force[2][1])
+
+            --print(at_x, at_y)
+            -- print("base matrix", Matrix.tostring(base))
+            -- print("force", force_x, force_y)
+            -- print("force after transformation", Matrix.tostring(to_base(force_x, force_y)))
+            -- print("base_force", base_force[1][1], base_force[2][1])
+            -- print("base_force'", Matrix.tostring(base_force))
+
+            table.insert(debugVectors, DebugVector(label, base_rel_at_x, base_rel_at_y, base_force[1][1], base_force[2][1]))
         end
         
         local speed_angle
@@ -120,37 +170,41 @@ Plane = Class{
             air_wing_angle = tmp
         end
 
-        local lift = function(angle) 
-            return 1.68429 * math.exp(-math.pow(angle / math.pi * 180.0 -17.3801, 2.0) / math.pow(2.0*15.0, 2.0))
-        end
-
         local lift_coeff = lift(air_wing_angle)
 
         -- print("lift coeff: ", lift_coeff)
 
         -- motor
-        local dx, dy = VectorLight.rotate(self.angle, self.motor_power * 10.0 * PIXELS_PER_METER, 0)
+        local dx, dy = VectorLight.rotate(self.angle, self.motorPower * 10.0 * PIXELS_PER_METER, 0)
         self.body:applyForce(dx, dy);
         -- table.insert(debugVectors, DebugVector(self.body:getX(), self.body:getY(), dx, dy))
 
         -- Air friction (and drag?) opposes movement towards plane velocity normal also
         -- hdd drag
-        local hddrag_x, hddrag_y = VectorLight.mul(nor_frict_coeff * math.pow(normal_vel, 2.0) * sign(normal_vel), -normal_unit_x, -normal_unit_y)
-        --        self.body:applyForce()
+        local hddrag_x, hddrag_y = VectorLight.mul(nor_frict_coeff * math.pow(normal_vel, 2.0) * sign(normal_vel), 0, -1.0)
         local b = to_base(-1.0, 0.0)
-        self.body:applyForce(hddrag_x, hddrag_y, b[1][1], b[2][1])
+        rel_force("hddrag", hddrag_x, hddrag_y, -self.xsize / 2, 0);
+        -- self.body:applyForce(hddrag_x, hddrag_y, b[1][1], b[2][1])
         
-        local lift_x, lift_y = VectorLight.mul(wing_lift * math.pow(fwd_vel, 2.0) * lift_coeff, normal_unit_x, normal_unit_y)
+        local lift_x, lift_y = VectorLight.mul(wing_lift * math.pow(fwd_vel, 2.0) * lift_coeff, normal_x, normal_y)
         self.body:applyForce(lift_x, lift_y, self.body:getX(), self.body:getY())
 
+        -- if self.turningCcw then
+        --     dx, dy = VectorLight.rotate(self.angle, 0, 50000)
+        -- elseif self.turningCw then
+        --     dx, dy = VectorLight.rotate(self.angle, 0, -50000)
+        -- end
         if self.turningCcw then
-            dx, dy = VectorLight.rotate(self.angle, 0, 50000)
+            dx, dy = 0, turn_speed * dt
         elseif self.turningCw then
-            dx, dy = VectorLight.rotate(self.angle, 0, -50000)
+            dx, dy = 0, -turn_speed * dt
         end
-        local rdx, rdy = VectorLight.rotate(self.angle, self.xsize / 2, 0)
-        self.body:applyForce(dx, dy, self.body:getX() + rdx, self.body:getY() + rdy)
-        table.insert(debugVectors, DebugVector(self.body:getX() + rdx, self.body:getY() + rdy, dx, dy))
+        if self.turningCw or self.turningCcw then 
+            dx, dy = VectorLight.mul(turn_speed * math.pow(tail_speed, 2.0) * sign(tail_speed), dx, dy)
+            -- print("dx", dx, "dy", dy, "tail_speed", tail_speed)
+            -- self.body:applyForce(dx, dy, self.body:getX() + rdx, self.body:getY() + rdy)
+            rel_force("turn", dx, dy, -self.xsize / 2, 0);
+        end
         -- print(dx, dy)
 
         -- table.insert(debugVectors, DebugVector(self.x + width / 2, self.y + height / 2, 0, -100))
