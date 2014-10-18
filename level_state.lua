@@ -28,6 +28,8 @@ function level_state:enter(previous, level_file)
     love.graphics.setBackgroundColor({0, 0, 0, 255})
     current_level = Level()
     current_level.world:setCallbacks(begin_contact, end_contact, pre_solve, post_solve)
+
+    players[1]:setPlane(current_level:getPlane(1))
 end
 
 

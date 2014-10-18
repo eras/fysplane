@@ -23,9 +23,13 @@ Level = Class{
         love.graphics.draw(self.background)
         love.graphics.setCanvas()
 
-        Plane(100, 100, self)
+        self.planes = { [1] = Plane(100, 100, self) }
         Rectangle(70, 250, self, "static", 0.1, 50, 50, 1, love.graphics.newImage("resources/graphics/box-50x50.png"))
         self:insertGround()
+    end;
+
+    getPlane = function(self, player)
+        return self.planes[player]
     end;
 
     delete = function(self)
