@@ -76,8 +76,8 @@ local function new(class)
     else
         table.insert(class.class_tree, class_id)
     end
-    class.class_id = class_id
 
+    class.class_id = class_id
     class_id = class_id + 1
 
     -- Check if object is instance of given class
@@ -94,8 +94,6 @@ local function new(class)
         end
         return false
     end
-
-    class_id = class_id + 1
 
     -- constructor call
     return setmetatable(class, {__call = function(c, ...)

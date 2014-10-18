@@ -1,0 +1,42 @@
+Class = require 'hump.class'
+
+-- Entity is the basic building block of all objects in fysplane. All other
+-- objects in game that are not part of the background derive from this class.
+
+entity_id = 1
+
+Entity = Class{
+    init = function(self, x, y, level)
+        self.x = x
+        self.y = y
+        self.level = level
+
+        self.id = entity_id
+        entity_id = entity_id + 1
+
+        self.level.entity_list[self.id] = self
+    end;
+
+    draw = function(self)
+    end;
+
+    update = function(self, dt)
+    end;
+
+    delete = function(self)
+        self.level.entity_list[self.id] = nil
+    end;
+}
+
+function drawEntities()
+    -- Do we need ordering? If so, use ipairs instead of pairs
+    for key, entity in pairs(entity_list) do
+        entity:draw()
+    end
+end
+
+function updateEntities(dt)
+    for key, entity in pairs(entity_list) do
+        entity:update(dt)
+    end
+end
