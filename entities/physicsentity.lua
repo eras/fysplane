@@ -33,7 +33,6 @@ PhysicsEntity = Class{
 
     -- Reimplement
     draw = function(self)
-        love.graphics.setColor({255, 255, 255, 255})
     end;
 
     -- Only update if physics is not static

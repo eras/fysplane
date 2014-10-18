@@ -1,7 +1,7 @@
 Gamestate = require 'hump.gamestate'
 require 'level'
 require 'player'
-require 'entities/vickers77'
+require 'entities/chaingun'
 
 level_state = {}
 
@@ -73,9 +73,9 @@ function level_state:keypressed(key, unicode)
         end
     end
 
-    local shot = Vickers77(200, 700, current_level)
-    shot:setAngle(-89)
-    shot:punch(-89, 10000)
+    local shot = Chaingun(200, 700, current_level)
+    shot:setAngle(-45)
+    shot:punch(-45, 100000)
 end
 
 

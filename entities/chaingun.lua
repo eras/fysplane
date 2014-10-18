@@ -2,9 +2,9 @@ Class = require 'hump.class'
 require 'entities/physicsentity'
 require 'settings'
 
-VICKERS_SOUND = love.audio.newSource("resources/audio/vickers77.mp3", "static")
+CHAINGUN_SOUND = love.audio.newSource("resources/audio/chaingun.mp3", "static")
 
-Vickers77 = Class{
+Chaingun = Class{
     __includes = Rectangle,
 
     MAX_LIFETIME = 60 * 5,
@@ -12,14 +12,14 @@ Vickers77 = Class{
     frame = 0,
 
     init = function(self, x, y, level)
-        local xsize = 0.35 * PIXELS_PER_METER
+        local xsize = 0.2 * PIXELS_PER_METER
         local ysize = 0.2 * PIXELS_PER_METER
 
         Rectangle.init(self, x, y, level, "dynamic", 0.2, xsize, ysize, 1000, nil)
         self.body:setBullet(true)
 
-        VICKERS_SOUND:rewind()
-        VICKERS_SOUND:play()
+        CHAINGUN_SOUND:rewind()
+        CHAINGUN_SOUND:play()
     end;
 
     update = function(self, dt)
@@ -33,6 +33,7 @@ Vickers77 = Class{
     end;
 
     draw = function(self)
+        love.graphics.setColor({255, 0, 0, 255})
         Rectangle.draw(self)
     end;
 }
