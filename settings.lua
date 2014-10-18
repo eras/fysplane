@@ -8,16 +8,20 @@ GRAVITY_Y = 9.82599 * PIXELS_PER_METER
 
 KEYMAP = {
     [1] = {
-        ccw = 'k',
-        cw = 'l',
-        flip = 'i',
-        shoot = 'o'
+        ccw        = 'k',
+        cw         = 'l',
+        flip       = 'i',
+        shoot      = 'o',
+        accelerate   = 'j',
+        decelerate = 'm'
     },
 
     [2] = {
-        ccw = 'a',
-        cw = 's',
-        flip = 'q',
-        shoot = 'w'
+        ccw        = 'a',
+        cw         = 's',
+        flip       = 'q',
+        shoot      = 'w',
+        accelerate   = 'x',
+        decelerate = 'z'
     }
 }
