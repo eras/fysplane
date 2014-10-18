@@ -120,6 +120,11 @@ Plane = Class{
         PhysicsEntity.update(self, dt)
         self.machinegun:update(dt)
 
+
+        if self.body:getY() < 0 then
+            self.motorPower = 0
+        end
+
         if self.powerupmode ~= nil then
             self.powerupmode:update(dt)
         end
