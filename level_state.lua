@@ -5,6 +5,7 @@ require 'scoreboard'
 require 'entities/chaingunpowerup'
 require 'entities/plane'
 require 'chaingunmode'
+require 'entities/plane'
 
 level_state = {}
 
@@ -137,6 +138,13 @@ function begin_contact(a, b, coll)
         elseif bObj:isinstance(Plane) and aObj:isinstance(ChaingunPowerUp) then
             aObj.deleteLater = true
             bObj:setPowerUpMode(ChaingunMode())
+        else
+            if aObj:isinstance(Plane) then
+                aObj:receiveDamage(1000);
+            end
+            if bObj:isinstance(Plane) then
+                bObj:receiveDamage(1000);
+            end
         end
     end
 end

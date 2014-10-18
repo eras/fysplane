@@ -81,6 +81,10 @@ Plane = Class{
         self.powerupmode = nil
     end;
 
+    receiveDamage = function(self, amount) 
+        self.health = math.max(0, self.health - amount);
+    end;
+
     getGunPosition = function(self)
         local x = self.body:getX()
         local y = self.body:getY()
@@ -248,20 +252,22 @@ Plane = Class{
     end;
 
     draw = function(self)
-        PhysicsEntity.draw(self)
-        love.graphics.push()
+        if self.health > 0 then
+            PhysicsEntity.draw(self)
+            love.graphics.push()
 
-        if self.goingRight then
-            love.graphics.translate(self.body:getX(), self.body:getY())
-            love.graphics.scale(-1, 1)
-            love.graphics.draw(self.frames[0], self.quad, 0, 0, -self.angle, 1, 1, self.xsize / 2, self.ysize / 2)
-        else
-            love.graphics.translate(self.body:getX(), self.body:getY())
-            love.graphics.draw(self.frames[0], self.quad, 0, 0, self.angle, 1, 1, self.xsize / 2, self.ysize / 2)
+            if self.goingRight then
+                love.graphics.translate(self.body:getX(), self.body:getY())
+                love.graphics.scale(-1, 1)
+                love.graphics.draw(self.frames[0], self.quad, 0, 0, -self.angle, 1, 1, self.xsize / 2, self.ysize / 2)
+            else
+                love.graphics.translate(self.body:getX(), self.body:getY())
+                love.graphics.draw(self.frames[0], self.quad, 0, 0, self.angle, 1, 1, self.xsize / 2, self.ysize / 2)
+            end
+
+            love.graphics.pop()
+            drawDebug(self.debugVectors)
         end
-
-        love.graphics.pop()
-        drawDebug(self.debugVectors)
     end;
 
     cw = function(self, isTurning)
