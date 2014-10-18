@@ -33,7 +33,7 @@ local head_area = 1.0
 Plane = Class{
     __includes = PhysicsEntity,
 
-    img = nil,
+    frames = {},
 
     motorPower = 100,
 
@@ -49,7 +49,7 @@ Plane = Class{
         local density = 50
         PhysicsEntity.init(self, x, y, level, "dynamic", 0.2)
         self.xsize = 5.5 * PIXELS_PER_METER
-        self.ysize = 2.0 * PIXELS_PER_METER
+        self.ysize = 4.0 * PIXELS_PER_METER
         self.shape = love.physics.newRectangleShape(self.xsize, self.ysize)
         PhysicsEntity.attachShape(self, density)
         self.body:setX(self.x + self.xsize / 2)
@@ -58,8 +58,10 @@ Plane = Class{
         self.body:setAngle(0)
         self.angle = 0
 
-        self.img = love.graphics.newImage("resources/graphics/box-50x50.png");
-        self.quad = love.graphics.newQuad(0, 0, self.xsize, self.ysize, self.img:getWidth(), self.img:getHeight())
+        for frame = 0,35 do
+            self.frames[frame] = love.graphics.newImage(string.format("resources/graphics/plane-%04d.png", frame))
+        end
+        self.quad = love.graphics.newQuad(0, 0, self.xsize, self.ysize, self.frames[0]:getWidth(), self.frames[0]:getHeight())
 
         self.machinegun = MachineGun(self, "vickers77")
     end;
@@ -223,7 +225,12 @@ Plane = Class{
 
     draw = function(self)
         PhysicsEntity.draw(self)
-        love.graphics.draw(self.img, self.quad, self.body:getX(), self.body:getY(), self.angle, 1, 1, self.xsize / 2, self.ysize / 2)
+        love.graphics.push()
+
+        love.graphics.translate(self.body:getX(), self.body:getY())
+        love.graphics.scale(-1, 1)
+        love.graphics.draw(self.frames[0], self.quad, 0, 0, -self.angle, 1, 1, self.xsize / 2, self.ysize / 2)
+        love.graphics.pop()
         drawDebug(debugVectors)
     end;
 
