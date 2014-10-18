@@ -22,18 +22,20 @@ end
 local fwd_frict_coeff = 0.2
 local nor_frict_coeff = 2.0
 local tail_frict_coeff = 0.5
-local turn_speed = 0.2 * 1000
-local wing_lift = 0.1
+local turn_speed = 2.0
+local wing_lift = 0.1 * 5
 local accel_speed = 1000.0
 local decel_speed = 2000.0
 local max_motorPower = 4000.0
+local plane_area = 10.0
+local head_area = 1.0
 
 Plane = Class{
     __includes = PhysicsEntity,
 
     img = nil,
 
-    motorPower = 0,
+    motorPower = 100,
 
     debugVectors = {},
 
@@ -46,13 +48,14 @@ Plane = Class{
     init = function(self, x, y, level)
         local density = 50
         PhysicsEntity.init(self, x, y, level, "dynamic", 0.2)
-        self.xsize = 55
-        self.ysize = 20
+        self.xsize = 5.5 * PIXELS_PER_METER
+        self.ysize = 2.0 * PIXELS_PER_METER
         self.shape = love.physics.newRectangleShape(self.xsize, self.ysize)
         PhysicsEntity.attachShape(self, density)
         self.body:setX(self.x + self.xsize / 2)
         self.body:setY(self.y - self.ysize / 2)
-        self.body:setAngle(math.pi / 2)
+        self.body:setLinearVelocity(100, 0)
+        self.body:setAngle(0)
         self.angle = 0
 
         self.img = love.graphics.newImage("resources/graphics/box-50x50.png");
@@ -179,15 +182,21 @@ Plane = Class{
         self.body:applyForce(dx, dy);
         -- table.insert(debugVectors, DebugVector(self.body:getX(), self.body:getY(), dx, dy))
 
+        -- (* self#add_force "fwddrag" *)
+        -- (*   (Gg.V2.smul (fwd_frict_coeff *. fwd_vel ** 2.0 *. head_area) (V.unit (negate vel))) *)
+        -- (*   (to_base (Gg.V2.v 0.0 0.0)); *)
+        local airdrag = -fwd_frict_coeff * math.pow(fwd_vel, 2.0) * head_area
+        rel_force("airdrag", airdrag, 0, 0, 0)
+
         -- Air friction (and drag?) opposes movement towards plane velocity normal also
         -- hdd drag
-        local hddrag_x, hddrag_y = VectorLight.mul(nor_frict_coeff * math.pow(normal_vel, 2.0) * sign(normal_vel), 0, -1.0)
+        local hddrag_x, hddrag_y = VectorLight.mul(nor_frict_coeff * math.pow(normal_vel, 2.0) * plane_area * sign(normal_vel), 0, -1.0)
         local b = to_base(-1.0, 0.0)
         rel_force("hddrag", hddrag_x, hddrag_y, -self.xsize / 2, 0);
         -- self.body:applyForce(hddrag_x, hddrag_y, b[1][1], b[2][1])
         
-        local lift_x, lift_y = VectorLight.mul(wing_lift * math.pow(fwd_vel, 2.0) * lift_coeff, normal_x, normal_y)
-        self.body:applyForce(lift_x, lift_y, self.body:getX(), self.body:getY())
+        local lift_x, lift_y = VectorLight.mul(wing_lift * math.pow(fwd_vel, 2.0) * lift_coeff, 0, -1)
+        rel_force("lift", lift_x, lift_y, self.xsize * 0.8, 0)
 
         -- if self.turningCcw then
         --     dx, dy = VectorLight.rotate(self.angle, 0, 50000)
@@ -195,15 +204,15 @@ Plane = Class{
         --     dx, dy = VectorLight.rotate(self.angle, 0, -50000)
         -- end
         if self.turningCcw then
-            dx, dy = 0, turn_speed * dt
+            dx, dy = 0, -turn_speed
         elseif self.turningCw then
-            dx, dy = 0, -turn_speed * dt
+            dx, dy = 0, turn_speed
         end
         if self.turningCw or self.turningCcw then 
-            dx, dy = VectorLight.mul(turn_speed * math.pow(tail_speed, 2.0) * sign(tail_speed), dx, dy)
+            dx, dy = VectorLight.mul(turn_speed * math.pow(fwd_vel, 2.0) * sign(fwd_vel), dx, dy)
             -- print("dx", dx, "dy", dy, "tail_speed", tail_speed)
             -- self.body:applyForce(dx, dy, self.body:getX() + rdx, self.body:getY() + rdy)
-            rel_force("turn", dx, dy, -self.xsize / 2, 0);
+            rel_force("turn", dx, dy, -0.4 * self.xsize, 0);
         end
         -- print(dx, dy)
 
