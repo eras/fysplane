@@ -58,7 +58,7 @@ Plane = Class{
         self.body:setY(self.y - self.ysize / 2)
         self.body:setLinearVelocity(xDir, yDir)
         self.goingRight = xDir >= 0
-        self.body:setAngle(0)
+        self.body:setAngle(math.atan2(yDir, xDir))
         -- self.body:setMassData(self.xsize / 2, self.ysize / 2, 440 * PIXELS_PER_METER, -1.0)
         -- self.body:setMassData(self.xsize / 2, 0, 430, 158194)
         self.fixture:setFriction(0)
