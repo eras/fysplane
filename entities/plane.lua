@@ -21,9 +21,9 @@ end
 
 local fwd_frict_coeff = 0.3
 local nor_frict_coeff = 2.0
-local tail_frict_coeff = 0.3
+local tail_frict_coeff = 10.4
 local turn_speed = 2.0
-local wing_lift = 0.1 * 5
+local wing_lift = 0.1 * 3
 local accel_speed = 100.0
 local decel_speed = 200.0
 local max_motorPower = ENGINE_MAX
