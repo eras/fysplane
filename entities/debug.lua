@@ -30,7 +30,7 @@ DebugVector = Class {
     end;
 }
 
-drawDebugVectors = function(debugVectors) 
+drawDebug = function(debugVectors) 
     for key, debugVector in pairs(debugVectors) do
         debugVector:draw();
     end
