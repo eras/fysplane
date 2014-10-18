@@ -142,5 +142,13 @@ Plane = Class{
         love.graphics.draw(self.img, self.quad, self.body:getX(), self.body:getY(), self.angle, 1, 1, self.xsize / 2, self.ysize / 2)
         drawDebugVectors(debugVectors)
     end;
+
+    cw = function(self, isTurning)
+        self.turningCw = isTurning
+    end;
+
+    ccw = function(self, isTurning)
+        self.turningCcw = isTurning
+    end;
 }
 
