@@ -5,12 +5,13 @@ PowerUpMode = Class{
     init = function(self, duration)
         self.age = 0
         self.duration = duration
+        self.plane = nil
     end;
 
     update = function(self, dt)
         self.age = self.age + dt
 
-        if self.age >= duration then
+        if self.age >= self.duration then
             self:deactivate()
         end
     end;
@@ -25,9 +26,10 @@ PowerUpMode = Class{
 
     activate = function(self, plane)
         plane.powerupmode = self
+        self.plane = plane
     end;
 
-    deactivate = function(self, plane)
-        plane.powerupmode = nil
+    deactivate = function(self)
+        self.plane.powerupmode = nil
     end;
 }

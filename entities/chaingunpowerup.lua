@@ -8,7 +8,7 @@ ChaingunPowerUp = Class{
     __includes = PowerUp,
 
     init = function(self, x, y, level)
-        PowerUp.init(self, x, y, level, 10)
+        PowerUp.init(self, x, y, level, 10, 16)
     end;
 
     draw = function(self)

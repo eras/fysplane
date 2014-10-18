@@ -94,6 +94,7 @@ Plane = Class{
     end;
 
     setPowerUpMode = function(self, powerupmode)
+        print("Got powerup!")
         self.powerupmode = powerupmode
         self.powerupmode:activate(self)
     end;

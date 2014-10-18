@@ -7,11 +7,14 @@ local ROTATION_SPEED = math.pi / 2
 PowerUp = Class{
     __includes = PhysicsEntity,
 
-    init = function(self, x, y, level, lifetime)
+    init = function(self, x, y, level, lifetime, radius)
         PhysicsEntity.init(self, x, y, level, "static", 0)
         self.angle = 0
         self.age = 0
         self.lifetime = lifetime
+
+        self.shape = love.physics.newCircleShape(radius)
+        PhysicsEntity.attachShape(self, 1)
     end;
 
     draw = function(self)
@@ -19,6 +22,8 @@ PowerUp = Class{
     end;
 
     update = function(self, dt)
+        PhysicsEntity.update(self, dt)
+        
         self.angle = self.angle + ROTATION_SPEED * dt
 
         if self.angle > math.pi * 2 then
