@@ -48,7 +48,7 @@ Plane = Class{
     goingRight = true, -- the plane is upside up and going right (or upside down and going left)
 
     init = function(self, x, y, xDir, yDir, level)
-        local density = 50
+        local density = 430
         PhysicsEntity.init(self, x, y, level, "dynamic", 0.2)
         self.xsize = 4.0 * PIXELS_PER_METER
         self.ysize = 4.3 * PIXELS_PER_METER
