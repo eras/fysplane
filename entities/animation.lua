@@ -41,5 +41,8 @@ Animation = Class{
 
     update = function(self, dt)
         self.curFrame = self.curFrame + dt * self.frames.fps
+        if self.curFrame >= self.frames.numFrames then
+            self:delete()
+        end
     end;
 }
