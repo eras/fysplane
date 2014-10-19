@@ -1,8 +1,10 @@
 Class = require 'hump.class'
 require 'entities/physicsentity'
+require 'entities/animation'
 require 'settings'
 
 local TINYSHOT_SOUND = love.audio.newSource("resources/audio/chaingun.mp3", "static")
+local explosionFrames = AnimationFrames("resources/graphics/miniexplosion-%04d.png", 4, 15)
 
 TinyShot = Class{
     __includes = Rectangle,
@@ -32,6 +34,10 @@ TinyShot = Class{
         if self.frame >= self.MAX_LIFETIME then
             self:delete()
         end
+    end;
+
+    wasHit = function(self)
+        Animation(self.body:getX(), self.body:getY(), self.level, explosionFrames)
     end;
 
     draw = function(self)

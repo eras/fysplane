@@ -3,6 +3,7 @@ require 'entities/physicsentity'
 require 'settings'
 
 local VICKERS_SOUND = love.audio.newSource("resources/audio/vickers77.mp3", "static")
+local explosionFrames = AnimationFrames("resources/graphics/miniexplosion-%04d.png", 4, 15)
 
 Vickers77 = Class{
     __includes = Rectangle,
@@ -33,6 +34,10 @@ Vickers77 = Class{
         if self.frame >= self.MAX_LIFETIME then
             self:delete()
         end
+    end;
+
+    wasHit = function(self)
+        Animation(self.body:getX(), self.body:getY(), self.level, explosionFrames)
     end;
 
     draw = function(self)
