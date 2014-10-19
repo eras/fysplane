@@ -56,16 +56,18 @@ local lift = function(angle)
     return 1.68429 * math.exp(-math.pow(angle / math.pi * 180.0 -17.3801, 2.0) / (2.0 * math.pow(15.0, 2.0)))
 end
 
-local fwd_frict_coeff = 1.0
-local nor_frict_coeff = 2.0
-local tail_frict_coeff = 10.4
-local turn_speed = 2.0
-local wing_lift = 0.1 * 3
+local fwd_frict_coeff = 0.5
+local nor_frict_coeff = 0.5
+local tail_frict_coeff = 0.5
+local tail_area = 5.0
+local turn_speed = 1.0
+local wing_lift = 0.5
 local accel_speed = 400.0
 local decel_speed = 400.0
 local max_motorPower = ENGINE_MAX
-local plane_area = 10.0
 local head_area = 1.0
+local plane_area = 10.0
+local motor_speed_ratio = 100.0
 
 local explosionFrames = AnimationFrames("resources/graphics/explosion-%04d.png", 36, 15, true)
 
@@ -74,7 +76,7 @@ Plane = Class{
 
     frames = {},
 
-    motorPower = 400,
+    motorPower = INITIAL_ENGINE_SPEED,
 
     debugVectors = {},
 
@@ -103,13 +105,15 @@ Plane = Class{
         self.body:setAngle(math.atan2(yDir, xDir))
         -- self.body:setMassData(self.xsize / 2, self.ysize / 2, 440 * PIXELS_PER_METER, -1.0)
         -- self.body:setMassData(self.xsize / 2, 0, 430, 158194)
+        self.body:setMassData(7, 5, 800, 558194.140625)
+        self.body:setAngularDamping(0.1)
         self.fixture:setFriction(0)
         self.angle = 0
 
         --x	16	y	17.200000762939	mass	3520	inertia	1942476.875
         --x	0	y	0	mass	860.00006103516	inertia	158194.140625
 
-        -- local x, y, mass, inertia = self.body:getMassData()
+        local x, y, mass, inertia = self.body:getMassData()
         print("x", x, "y", y, "mass", mass, "inertia", inertia)
 
         for frame = 0,35 do
@@ -133,6 +137,7 @@ Plane = Class{
 
     die = function(self)
         self.health = 0
+        self.machinegun:stopShooting()
         Animation(self.body:getX(), self.body:getY(), self.level, explosionFrames)
         self:getOwner():setPlane(nil)
         self:delete()
@@ -161,10 +166,12 @@ Plane = Class{
     end;
 
     shoot = function(self, down)
-        if down then
-            self.machinegun:startShooting()
-        else
-            self.machinegun:stopShooting()
+        if self.health > 0 then
+            if down then
+                self.machinegun:startShooting()
+            else
+                self.machinegun:stopShooting()
+            end
         end
     end;
 
@@ -174,7 +181,9 @@ Plane = Class{
     end;
 
     update = function(self, dt)
-        self.debugVectors = {}
+        local mass_x, mass_y, mass, inertia = self.body:getMassData()
+
+        self.debug = {}
         PhysicsEntity.update(self, dt)
         self.machinegun:update(dt)
 
@@ -220,35 +229,43 @@ Plane = Class{
         local fwd_vel = VectorLight.dot(vel_x, vel_y, fwd_x, fwd_y)
         local normal_vel = VectorLight.dot(vel_x, vel_y, normal_x, normal_y)
         -- print("fwd_vel", fwd_vel, "normal_vel", normal_vel, "vel_x", vel_x, "vel_y", vel_y, "normal_x", normal_x, "normal_y", normal_y)
-        table.insert(self.debugVectors, DebugVector("vel", self.body:getX(), self.body:getY(), vel_x, vel_y))
-        table.insert(self.debugVectors, DebugVector("fwd", self.body:getX(), self.body:getY(), fwd_x, fwd_y))
-        table.insert(self.debugVectors, DebugVector("normal", self.body:getX(), self.body:getY(), normal_x, normal_y))
+        table.insert(self.debug, DebugVector("vel", self.body:getX(), self.body:getY(), vel_x, vel_y))
+        table.insert(self.debug, DebugVector("fwd", self.body:getX(), self.body:getY(), fwd_x, fwd_y))
+        table.insert(self.debug, DebugVector("normal", self.body:getX(), self.body:getY(), normal_x, normal_y))
 
-        local tail_speed = self.body:getAngularVelocity() * math.pi * 2.0 * self.xsize / 2.0
+        local tail_speed = self.body:getAngularVelocity() * math.pi * 2.0 * self.xsize / 2.0 / PIXELS_PER_METER
+        -- print("angular velocity", self.body:getAngularVelocity())
         local tail_vel = to_base(0, tail_speed) -- hmm?! not tail_speed, 0?
         local abs_tail_vel_x, abs_tail_vel_y = VectorLight.add(vel_x, vel_y, tail_vel[1][1], tail_vel[2][1])
-        table.insert(self.debugVectors, DebugVector("tail", self.body:getX(), self.body:getY(), tail_vel[1][1], tail_vel[2][1]))
+        -- table.insert(self.debug, DebugVector("tail", self.body:getX(), self.body:getY(), tail_vel[1][1], tail_vel[2][1]))
         --print("absolute tail veloicty: ", abs_tail_vel_x, abs_tail_vel_y)
 
         local head_angle = self.angle
 
         local rel_force = function(label, force_x, force_y, rel_at_x, rel_at_y)
-            -- rdx, rdy = VectorLight.add(rdx, rdy, self.body:getX(), self.body:getY())
-            local base_force = to_base(force_x, force_y)
-            local base_rel_at = to_base(rel_at_x, rel_at_y)
-            base_rel_at_x, base_rel_at_y = VectorLight.add(base_rel_at[1][1], base_rel_at[2][1], self.body:getX(), self.body:getY())
-            self.body:applyForce(base_force[1][1], base_force[2][1], base_rel_at_x, base_rel_at_y)
+            if label == "turn" or
+                label == "lift" or
+                label == "hddrag" or
+                label == "airdrag" or
+                label == "tf" or
+                label == "motor" then
+                -- rdx, rdy = VectorLight.add(rdx, rdy, self.body:getX(), self.body:getY())
+                local base_force = to_base(force_x, force_y)
+                local base_rel_at = to_base(rel_at_x, rel_at_y)
+                base_rel_at_x, base_rel_at_y = VectorLight.add(base_rel_at[1][1], base_rel_at[2][1], self.body:getX(), self.body:getY())
+                self.body:applyForce(base_force[1][1], base_force[2][1], base_rel_at_x, base_rel_at_y)
 
-            at_x, at_y = VectorLight.add(base_rel_at_x, base_rel_at_y, base_force[1][1], base_force[2][1])
+                at_x, at_y = VectorLight.add(base_rel_at_x, base_rel_at_y, base_force[1][1], base_force[2][1])
 
-            --print(at_x, at_y)
-            -- print("base matrix", Matrix.tostring(base))
-            -- print("force", force_x, force_y)
-            -- print("force after transformation", Matrix.tostring(to_base(force_x, force_y)))
-            -- print("base_force", base_force[1][1], base_force[2][1])
-            -- print("base_force'", Matrix.tostring(base_force))
+                --print(at_x, at_y)
+                -- print("base matrix", Matrix.tostring(base))
+                -- print("force", force_x, force_y)
+                -- print("force after transformation", Matrix.tostring(to_base(force_x, force_y)))
+                -- print("base_force", base_force[1][1], base_force[2][1])
+                -- print("base_force'", Matrix.tostring(base_force))
 
-            table.insert(self.debugVectors, DebugVector(label, base_rel_at_x, base_rel_at_y, base_force[1][1], base_force[2][1]))
+                table.insert(self.debug, DebugVector(label, base_rel_at_x, base_rel_at_y, base_force[1][1], base_force[2][1]))
+            end
         end
         
         local speed_angle
@@ -267,14 +284,16 @@ Plane = Class{
             air_wing_angle = tmp
         end
 
-        local lift_coeff = lift(air_wing_angle)
+        local lift_coeff = lift(-air_wing_angle)
 
         -- print("lift coeff: ", lift_coeff)
 
         -- motor
-        local dx, dy = VectorLight.rotate(self.angle, self.motorPower * 10.0 * PIXELS_PER_METER, 0)
-        self.body:applyForce(dx, dy);
-        -- table.insert(self.debugVectors, DebugVector(self.body:getX(), self.body:getY(), dx, dy))
+        rel_force("motor",
+                  self.motorPower * motor_speed_ratio * PIXELS_PER_METER, 0,
+                  mass_x + 0.2, mass_y + 0.4)
+        --self.body:applyForce(dx, dy);
+        -- table.insert(self.debug, DebugVector(self.body:getX(), self.body:getY(), dx, dy))
 
         -- (* self#add_force "fwddrag" *)
         -- (*   (Gg.V2.smul (fwd_frict_coeff *. fwd_vel ** 2.0 *. head_area) (V.unit (negate vel))) *)
@@ -285,14 +304,13 @@ Plane = Class{
         -- Air friction (and drag?) opposes movement towards plane velocity normal also
         -- hdd drag
         local hddrag_x, hddrag_y = VectorLight.mul(nor_frict_coeff * math.pow(normal_vel, 2.0) * plane_area * sign(normal_vel), 0, -1.0)
-        local b = to_base(-1.0, 0.0)
-        rel_force("hddrag", hddrag_x, hddrag_y, -self.xsize / 2, 0);
-        -- self.body:applyForce(hddrag_x, hddrag_y, b[1][1], b[2][1])
+        rel_force("hddrag", hddrag_x, hddrag_y, mass_x, mass_y);
         
         local lift_x, lift_y = VectorLight.mul(wing_lift * math.pow(fwd_vel, 2.0) * lift_coeff, 0, -1)
-        rel_force("lift", lift_x, lift_y, self.xsize * 0.8, 0)
+        rel_force("lift", lift_x, lift_y, mass_x, mass_y)
 
-        local tail_frict = tail_frict_coeff * math.pow(tail_speed, 2.0) * sign(tail_speed)
+        local tail_frict = tail_area * tail_frict_coeff * math.pow(normal_vel, 2.0) * -sign(normal_vel)
+        -- print("tail_speed", tail_speed)
         rel_force("tf", 0, tail_frict, -self.xsize / 2, 0)
 
         -- if self.turningCcw then
@@ -301,21 +319,28 @@ Plane = Class{
         --     dx, dy = VectorLight.rotate(self.angle, 0, -50000)
         -- end
         if self.turningCcw then
-            dx, dy = 0, -turn_speed
-        elseif self.turningCw then
             dx, dy = 0, turn_speed
+        elseif self.turningCw then
+            dx, dy = 0, -turn_speed
         end
         if self.turningCw or self.turningCcw then 
-            dx, dy = VectorLight.mul(turn_speed * math.pow(fwd_vel, 2.0) * sign(fwd_vel), dx, dy)
+            dx, dy = VectorLight.mul(turn_speed * math.pow(fwd_vel, 2.0) -- * sign(fwd_vel)
+                                     , dx, dy)
+            -- dx, dy = VectorLight.mul(turn_speed * 10000 -- * sign(fwd_vel)
+            --                          , dx, dy)
             -- print("dx", dx, "dy", dy, "tail_speed", tail_speed)
             -- self.body:applyForce(dx, dy, self.body:getX() + rdx, self.body:getY() + rdy)
             rel_force("turn", dx, dy, -0.4 * self.xsize, 0);
         end
         -- print(dx, dy)
 
-        -- table.insert(self.debugVectors, DebugVector(self.x + width / 2, self.y + height / 2, 0, -100))
-        -- table.insert(self.debugVectors, DebugVector(self.x, self.y, -100, 0))
-        -- table.insert(self.debugVectors, DebugVector(self.x + 55, self.y + 10, dx, dy)
+        -- table.insert(self.debug, DebugVector(self.x + width / 2, self.y + height / 2, 0, -100))
+        -- table.insert(self.debug, DebugVector(self.x, self.y, -100, 0))
+        -- table.insert(self.debug, DebugVector(self.x + 55, self.y + 10, dx, dy)
+
+        local xy = to_base(mass_x, mass_y)
+        local x, y = VectorLight.add(xy[1][1], xy[2][1], self.body:getX(), self.body:getY())
+        table.insert(self.debug, DebugCircle("mc", x, y))
     end;
 
     draw = function(self)
@@ -334,11 +359,8 @@ Plane = Class{
             end
 
             love.graphics.pop()
-            drawDebug(self.debugVectors)
 
-            if self.powerupmode ~= nil then
-                self.powerupmode:draw(self.body:getX(), self.body:getY())
-            end
+            drawDebug(self.debug)
         end
     end;
 
