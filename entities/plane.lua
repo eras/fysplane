@@ -31,7 +31,7 @@ local max_motorPower = ENGINE_MAX
 local plane_area = 10.0
 local head_area = 1.0
 
-local explosionFrames = AnimationFrames("resources/graphics/explosion-%04d.png", 36, 15)
+local explosionFrames = AnimationFrames("resources/graphics/explosion-%04d.png", 36, 15, true)
 
 Plane = Class{
     __includes = PhysicsEntity,

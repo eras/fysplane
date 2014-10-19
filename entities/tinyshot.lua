@@ -4,7 +4,7 @@ require 'entities/animation'
 require 'settings'
 
 local TINYSHOT_SOUND = love.audio.newSource("resources/audio/chaingun.mp3", "static")
-local explosionFrames = AnimationFrames("resources/graphics/miniexplosion-%04d.png", 4, 15)
+local explosionFrames = AnimationFrames("resources/graphics/miniexplosion-%04d.png", 4, 15, false)
 
 TinyShot = Class{
     __includes = Rectangle,

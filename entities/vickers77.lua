@@ -3,7 +3,7 @@ require 'entities/physicsentity'
 require 'settings'
 
 local VICKERS_SOUND = love.audio.newSource("resources/audio/vickers77.mp3", "static")
-local explosionFrames = AnimationFrames("resources/graphics/miniexplosion-%04d.png", 4, 15)
+local explosionFrames = AnimationFrames("resources/graphics/miniexplosion-%04d.png", 4, 15, false)
 
 Vickers77 = Class{
     __includes = Rectangle,
