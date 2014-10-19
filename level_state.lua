@@ -4,6 +4,7 @@ require 'player'
 require 'scoreboard'
 require 'entities/chaingunpowerup'
 require 'entities/plane'
+require 'entities/debug'
 require 'chaingunmode'
 require 'entities/plane'
 require 'machinegun'
@@ -116,6 +117,11 @@ function level_state:keypressed(key, unicode)
        or love.keyboard.isDown("rctrl")) then
 
         current_level.reset = true
+    elseif key == "d"
+       and (love.keyboard.isDown("lctrl")
+       or love.keyboard.isDown("rctrl")) then
+
+        debugEnabled = not debugEnabled
     elseif key == " " then
         paused = not paused
     else

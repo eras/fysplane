@@ -30,8 +30,12 @@ DebugVector = Class {
     end;
 }
 
+debugEnabled = false
+
 drawDebug = function(debugVectors) 
-    for key, debugVector in pairs(debugVectors) do
-        debugVector:draw();
+    if debugEnabled then
+        for key, debugVector in pairs(debugVectors) do
+            debugVector:draw();
+        end
     end
 end;
