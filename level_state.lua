@@ -55,7 +55,10 @@ function level_state:enter(previous, level_file)
         local i0 = i - 1
         local x = 20 + (i0 * SCOREBOARD_WIDTH) + (i0 * SCOREBOARD_MARGIN)
 
-        scoreboards[i] = Scoreboard(x, 20, players[i])
+        scoreboards[i] = Scoreboard(x, 20,
+                                    function()
+                                        return players[i]
+                                    end)
     end
 end
 
