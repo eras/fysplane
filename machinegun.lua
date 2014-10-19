@@ -3,6 +3,7 @@ Class = require 'hump/class'
 
 require 'entities/vickers77'
 require 'entities/tinyshot'
+require 'entities/bigball'
 
 GUNS = {
     chaingun = {
@@ -10,6 +11,13 @@ GUNS = {
         force = 150000,
         projectile = TinyShot,
         damage = 5
+    },
+
+    bigball = {
+        interval = 1,
+        force = 1000000,
+        projectile = BigBall,
+        damage = 0
     },
 
     vickers77 = {
@@ -31,18 +39,15 @@ MachineGun = Class{
     end;
 
     update = function(self, dt)
-        if self.shooting then
-            if self.since_last_shot >= self.gun['interval'] then
-                self:fire()
-                self.since_last_shot = 0
-            else
-                self.since_last_shot = self.since_last_shot + dt
-            end
+        if self.shooting and self.since_last_shot >= self.gun['interval'] then
+            self:fire()
+            self.since_last_shot = 0
+        else
+            self.since_last_shot = self.since_last_shot + dt
         end
     end;
 
     setType = function(self, type)
-        print(GUNS['vickers77'])
         self.gun = GUNS[type]
         self.since_last_shot = 0
     end;
@@ -62,7 +67,6 @@ MachineGun = Class{
 
     startShooting = function(self)
         self.shooting = true
-        self.since_last_shot = self.gun['interval']
     end;
 
     stopShooting = function(self)

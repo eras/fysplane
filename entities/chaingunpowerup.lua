@@ -1,5 +1,6 @@
 Class = require 'hump.class'
 require 'entities/powerup'
+require 'chaingunmode'
 
 local CHAINGUNPOWERUP_IMG = love.graphics.newImage("resources/graphics/chaingunpowerup.png")
 local CHAINGUNPOWERUP_QUAD = love.graphics.newQuad(0, 0, 32, 32, 32, 32)
@@ -9,6 +10,7 @@ ChaingunPowerUp = Class{
 
     init = function(self, x, y, level)
         PowerUp.init(self, x, y, level, 10, 16)
+        self.mode = ChaingunMode()
     end;
 
     draw = function(self)

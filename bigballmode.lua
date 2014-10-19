@@ -2,7 +2,7 @@ Class = require 'hump/class'
 require 'powerupmode'
 require 'settings'
 
-ChaingunMode = Class{
+BigBallMode = Class{
     __include = PowerUpMode,
 
     init = function(self)
@@ -15,7 +15,7 @@ ChaingunMode = Class{
 
     activate = function(self, plane)
         PowerUpMode.activate(self, plane)
-        plane.machinegun:setType("chaingun")
+        plane.machinegun:setType("bigball")
     end;
 
     deactivate = function(self)

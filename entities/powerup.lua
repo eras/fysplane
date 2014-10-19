@@ -19,6 +19,8 @@ PowerUp = Class{
 
         -- Don't collide with ammo
         self.fixture:setMask(3)
+
+        self.mode = nil
     end;
 
     draw = function(self)
@@ -27,7 +29,7 @@ PowerUp = Class{
 
     update = function(self, dt)
         PhysicsEntity.update(self, dt)
-        
+
         self.angle = self.angle + ROTATION_SPEED * dt
 
         if self.angle > math.pi * 2 then
