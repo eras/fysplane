@@ -2,6 +2,7 @@ Class = require 'hump.class'
 require 'entities/physicsentity'
 require 'settings'
 require 'entities/debug'
+require 'entities/animation'
 Matrix = require 'matrix'
 VectorLight = require 'hump/vector-light'
 require 'utils'
@@ -50,6 +51,7 @@ Plane = Class{
     init = function(self, x, y, xDir, yDir, level)
         local density = 50
         PhysicsEntity.init(self, x, y, level, "dynamic", 0.2)
+        self.level = level
         self.xsize = 4.0 * PIXELS_PER_METER
         self.ysize = 4.3 * PIXELS_PER_METER
         self.shape = love.physics.newRectangleShape(self.xsize, self.ysize)
@@ -82,7 +84,12 @@ Plane = Class{
     end;
 
     receiveDamage = function(self, amount) 
+        local oldHealth = self.health
         self.health = math.max(0, self.health - amount);
+        if oldHealth > 0 and self.health == 0 then
+            Animation(self.body:getX(), self.body:getY(), self.level, 
+                      "resources/graphics/explosion-%04d.png", 36, 15)
+        end
     end;
 
     getGunPosition = function(self)
