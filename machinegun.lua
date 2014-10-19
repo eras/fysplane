@@ -55,7 +55,9 @@ MachineGun = Class{
         shot:setOwner(self.plane);
         local angle = self.plane.body:getAngle()
         shot.body:setAngle(angle)
-        shot:punch(angle, self.gun['force'])
+
+        local speeds = rad_dist_to_xy(angle, 50000)
+        shot.body:setLinearVelocity(speeds[1], speeds[2])
     end;
 
     startShooting = function(self)
