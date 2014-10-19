@@ -8,6 +8,42 @@ VectorLight = require 'hump/vector-light'
 require 'utils'
 require 'machinegun'
 
+local CLANG_SFX = {
+    love.audio.newSource("resources/audio/clangs/cast iron clangs - Marker #1.wav"),
+    love.audio.newSource("resources/audio/clangs/cast iron clangs - Marker #2.wav"),
+    love.audio.newSource("resources/audio/clangs/cast iron clangs - Marker #3.wav"),
+    love.audio.newSource("resources/audio/clangs/cast iron clangs - Marker #4.wav"),
+    love.audio.newSource("resources/audio/clangs/cast iron clangs - Marker #5.wav"),
+    love.audio.newSource("resources/audio/clangs/cast iron clangs - Marker #6.wav"),
+    love.audio.newSource("resources/audio/clangs/cast iron clangs - Marker #7.wav"),
+    love.audio.newSource("resources/audio/clangs/cast iron clangs - Marker #8.wav"),
+    love.audio.newSource("resources/audio/clangs/cast iron clangs - Marker #9.wav"),
+    love.audio.newSource("resources/audio/clangs/cast iron clangs - Marker #10.wav"),
+    love.audio.newSource("resources/audio/clangs/cast iron clangs - Marker #11.wav"),
+    love.audio.newSource("resources/audio/clangs/cast iron clangs - Marker #12.wav"),
+    love.audio.newSource("resources/audio/clangs/cast iron clangs - Marker #13.wav"),
+    love.audio.newSource("resources/audio/clangs/cast iron clangs - Marker #14.wav"),
+    love.audio.newSource("resources/audio/clangs/cast iron clangs - Marker #15.wav"),
+    love.audio.newSource("resources/audio/clangs/cast iron clangs - Marker #16.wav"),
+    love.audio.newSource("resources/audio/clangs/cast iron clangs - Marker #17.wav"),
+    love.audio.newSource("resources/audio/clangs/cast iron clangs - Marker #18.wav"),
+    love.audio.newSource("resources/audio/clangs/cast iron clangs - Marker #19.wav"),
+    love.audio.newSource("resources/audio/clangs/cast iron clangs - Marker #20.wav"),
+    love.audio.newSource("resources/audio/clangs/cast iron clangs - Marker #21.wav"),
+    love.audio.newSource("resources/audio/clangs/cast iron clangs - Marker #22.wav"),
+    love.audio.newSource("resources/audio/clangs/cast iron clangs - Marker #23.wav"),
+    love.audio.newSource("resources/audio/clangs/cast iron clangs - Marker #24.wav"),
+    love.audio.newSource("resources/audio/clangs/cast iron clangs - Marker #25.wav"),
+    love.audio.newSource("resources/audio/clangs/cast iron clangs - Marker #26.wav"),
+    love.audio.newSource("resources/audio/clangs/cast iron clangs - Marker #27.wav"),
+    love.audio.newSource("resources/audio/clangs/cast iron clangs - Marker #28.wav"),
+    love.audio.newSource("resources/audio/clangs/cast iron clangs - Marker #29.wav"),
+    love.audio.newSource("resources/audio/clangs/cast iron clangs - Marker #30.wav"),
+    love.audio.newSource("resources/audio/clangs/cast iron clangs - Marker #31.wav"),
+    love.audio.newSource("resources/audio/clangs/cast iron clangs - Marker #32.wav"),
+    love.audio.newSource("resources/audio/clangs/cast iron clangs - Marker #33.wav")
+}
+
 local function sign(v)
     if v >= 0 then
         return 1
@@ -106,7 +142,7 @@ Plane = Class{
         local x = self.body:getX()
         local y = self.body:getY()
 
-        local pos = rad_dist_to_xy(self.angle, self.xsize / 2)
+        local pos = rad_dist_to_xy(self.angle, self.xsize)
         return {x + pos[1], y + pos[2]}
     end;
 
@@ -130,6 +166,11 @@ Plane = Class{
         else
             self.machinegun:stopShooting()
         end
+    end;
+
+    wasHit = function(self)
+        local i = love.math.random(#CLANG_SFX)
+        CLANG_SFX[i]:play()
     end;
 
     update = function(self, dt)
