@@ -83,6 +83,15 @@ function level_state:update(dt)
     if not paused then
         current_level:updateEntities(dt)
     end
+
+    if players[1].health == 0 then
+        current_level:respawnPlayer(1)
+        players[1]:setPlane(current_level:getPlane(1))
+    end
+    if players[2].health == 0 then
+        current_level:respawnPlayer(2)
+        players[2]:setPlane(current_level:getPlane(2))
+    end
 end
 
 

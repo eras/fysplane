@@ -33,6 +33,7 @@ Player = Class{
         self.plane = plane
         if plane ~= nil then
             plane:setOwner(self)
+            self.health = 1000
         end
     end;
 

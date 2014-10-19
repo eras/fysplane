@@ -24,13 +24,24 @@ Level = Class{
         love.graphics.draw(self.background)
         love.graphics.setCanvas()
 
-        self.planes = { [1] = Plane(100, 100, INITIAL_PLANE_SPEED, 0, self),
-                        [2] = Plane(love.window.getWidth() - 100 - 100, 100, -INITIAL_PLANE_SPEED, 0, self),}
+        self.makePlanes = { [1] = function()
+                                return Plane(100, 100, INITIAL_PLANE_SPEED, 0, self)
+                             end,
+                            [2] = function()
+                                return Plane(love.window.getWidth() - 100 - 100, 100, -INITIAL_PLANE_SPEED, 0, self)
+                            end }
+
+        self.planes = { [1] = self.makePlanes[1](),
+                        [2] = self.makePlanes[2]() }
         self:insertGround()
     end;
 
-    getPlane = function(self, player)
-        return self.planes[player]
+    respawnPlayer = function(self, playerIdx)
+        self.planes[playerIdx] = self.makePlanes[playerIdx]()
+    end;
+
+    getPlane = function(self, playerIdx)
+        return self.planes[playerIdx]
     end;
 
     delete = function(self)
