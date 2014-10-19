@@ -1,6 +1,7 @@
 Class = require 'hump.class'
 require 'entities/rectangle'
 require 'entities/plane'
+require 'entities/physicsentity'
 require 'settings'
 
 -- A level manages the level datastructure containing static blocks and level
@@ -61,14 +62,14 @@ Level = Class{
         self.world:update(dt)
 
         for key, entity in pairs(self.entity_list) do
-
-            while entity.body:getX() > love.window.getWidth() + 200 do
-                entity.body:setX(entity.body:getX() - love.window.getWidth() - 300)
+            if entity:isinstance(PhysicsEntity) then
+                while entity.body:getX() > love.window.getWidth() + 200 do
+                    entity.body:setX(entity.body:getX() - love.window.getWidth() - 300)
+                end
+                while entity.body:getX() < -200 do
+                    entity.body:setX(entity.body:getX() + love.window.getWidth() + 300)
+                end
             end
-            while entity.body:getX() < -200 do
-                entity.body:setX(entity.body:getX() + love.window.getWidth() + 300)
-            end
-
             entity:update(dt)
         end
     end;
