@@ -20,7 +20,7 @@ local lift = function(angle)
     return 1.68429 * math.exp(-math.pow(angle / math.pi * 180.0 -17.3801, 2.0) / (2.0 * math.pow(15.0, 2.0)))
 end
 
-local fwd_frict_coeff = 0.3
+local fwd_frict_coeff = 1.0
 local nor_frict_coeff = 2.0
 local tail_frict_coeff = 10.4
 local turn_speed = 2.0
