@@ -16,7 +16,7 @@ local function sign(v)
     end
 end
 
-local lift = function(angle) 
+local lift = function(angle)
     return 1.68429 * math.exp(-math.pow(angle / math.pi * 180.0 -17.3801, 2.0) / (2.0 * math.pow(15.0, 2.0)))
 end
 
@@ -25,8 +25,8 @@ local nor_frict_coeff = 2.0
 local tail_frict_coeff = 10.4
 local turn_speed = 2.0
 local wing_lift = 0.1 * 3
-local accel_speed = 100.0
-local decel_speed = 200.0
+local accel_speed = 400.0
+local decel_speed = 400.0
 local max_motorPower = ENGINE_MAX
 local plane_area = 10.0
 local head_area = 1.0
