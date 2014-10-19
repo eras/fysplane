@@ -26,7 +26,6 @@ Level = Class{
 
         self.planes = { [1] = Plane(100, 100, INITIAL_PLANE_SPEED, 0, self),
                         [2] = Plane(love.window.getWidth() - 100 - 100, 100, -INITIAL_PLANE_SPEED, 0, self),}
-        Rectangle(70, 250, self, "static", 0.1, 50, 50, 1, love.graphics.newImage("resources/graphics/box-50x50.png"))
         self:insertGround()
     end;
 
