@@ -29,10 +29,10 @@ end
 function level_state:enter(previous, level_file)
     entity_id = 1
     if level_music == nil then
-        --level_music = love.audio.newSource("resources/audio/freeze.ogg")
-        --level_music:setVolume(0.5)
-        --level_music:setLooping(true)
-        --level_music:play()
+        level_music = love.audio.newSource("resources/audio/Beavis II.mp3")
+        level_music:setVolume(0.5)
+        level_music:setLooping(true)
+        level_music:play()
     end
 
     love.graphics.setBackgroundColor({0, 0, 0, 255})
@@ -133,6 +133,10 @@ function begin_contact(a, b, coll)
     local bObj = b:getUserData()
 
     if aObj ~= nil and bObj ~= nil then
+        if aObj:isinstance(ChaingunPowerUp) or bObj:isinstance(ChaingunPowerUp) then
+            coll:setEnabled(false)
+        end
+
         if aObj:isinstance(Plane) and bObj:isinstance(ChaingunPowerUp) then
             bObj.deleteLater = true
             aObj:setPowerUpMode(ChaingunMode())
