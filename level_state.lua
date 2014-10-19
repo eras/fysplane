@@ -6,6 +6,7 @@ require 'entities/chaingunpowerup'
 require 'entities/plane'
 require 'chaingunmode'
 require 'entities/plane'
+require 'machinegun'
 
 level_state = {}
 
@@ -146,6 +147,29 @@ function begin_contact(a, b, coll)
             end
             if bObj:isinstance(Plane) and (aObj:getOwner() == nil or aObj:getOwner().id ~= bObj.id) then
                 bObj:receiveDamage(1000);
+            end
+
+            local plane = nil
+            local other = nil
+            if aObj:isinstance(Plane) then
+                plane = aObj
+                other = bObj
+            elseif bObj:isinstance(Plane) then
+                plane = bObj
+                other = aObj
+            end
+
+            if plane then
+                if other:getOwner() == nil then
+                    -- Collision with ground or other plane
+                    plane:receiveDamage(1000)
+                elseif other:getOwner().id ~= plane.id then
+                    for key, gun in pairs(GUNS) do
+                        if other:isinstance(gun['projectile']) then
+                            plane:receiveDamage(gun['damage'])
+                        end
+                    end
+                end
             end
         end
     end

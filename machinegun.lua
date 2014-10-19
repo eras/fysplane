@@ -4,18 +4,19 @@ Class = require 'hump/class'
 require 'entities/vickers77'
 require 'entities/tinyshot'
 
-
 GUNS = {
     chaingun = {
         interval = 0.01,
         force = 150000,
-        projectile = TinyShot
+        projectile = TinyShot,
+        damage = 1
     },
 
     vickers77 = {
         interval = 0.1,
         force = 300000,
-        projectile = Vickers77
+        projectile = Vickers77,
+        damage = 10
     }
 }
 
@@ -41,6 +42,7 @@ MachineGun = Class{
     end;
 
     setType = function(self, type)
+        print(GUNS['vickers77'])
         self.gun = GUNS[type]
         self.since_last_shot = 0
     end;
