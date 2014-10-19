@@ -113,8 +113,6 @@ function level_state:leave(bool)
 end
 
 function level_state:keypressed(key, unicode)
-    print('Somebody pressed ' .. key)
-
     -- Ctrl + R restarts current level.
     if key == "r"
        and (love.keyboard.isDown("lctrl")
@@ -137,9 +135,7 @@ end
 
 
 function level_state:keyreleased(key, unicode)
-    print('Somebody released ' .. key)
-
-   for id, player in pairs(players) do
+    for id, player in pairs(players) do
         player:release(key)
     end
 end

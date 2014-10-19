@@ -48,7 +48,6 @@ Player = Class{
     press = function(self, key)
         for action, keycode in pairs(self.keys) do
             if key == keycode then
-                print(self.name .. ' pressed ' .. action .. '!')
                 if self.actions[action] and self.plane then
                     self.actions[action](true)
                 end
@@ -59,7 +58,6 @@ Player = Class{
     release = function(self, key)
         for action, keycode in pairs(self.keys) do
             if key == keycode then
-                print(self.name .. ' released ' .. action .. '!')
                 if self.actions[action] and self.plane then
                     self.actions[action](false)
                 end
