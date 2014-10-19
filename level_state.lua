@@ -91,6 +91,9 @@ function level_state:update(dt)
         current_level:updateEntities(dt)
     end
 
+    players[1]:update(dt)
+    players[2]:update(dt)
+
     if players[1]:getPlane() == nil then
         current_level:respawnPlayer(1)
         players[1]:setPlane(current_level:getPlane(1))

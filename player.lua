@@ -45,6 +45,9 @@ Player = Class{
         self.score = self.score + score
     end;
 
+    update = function(self, dt)
+    end;
+
     press = function(self, key)
         for action, keycode in pairs(self.keys) do
             if key == keycode then
