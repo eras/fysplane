@@ -84,11 +84,13 @@ function level_state:update(dt)
         current_level:updateEntities(dt)
     end
 
-    if players[1].health == 0 then
+    if players[1]:getPlane() == nil then
+        print("HOP")
         current_level:respawnPlayer(1)
         players[1]:setPlane(current_level:getPlane(1))
     end
-    if players[2].health == 0 then
+    if players[2]:getPlane() == nil then
+        print("HIP")
         current_level:respawnPlayer(2)
         players[2]:setPlane(current_level:getPlane(2))
     end

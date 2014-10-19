@@ -37,6 +37,10 @@ Player = Class{
         end
     end;
 
+    getPlane = function(self)
+        return self.plane
+    end;
+
     press = function(self, key)
         for action, keycode in pairs(self.keys) do
             if key == keycode then
