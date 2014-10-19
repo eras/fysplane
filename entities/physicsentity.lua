@@ -62,6 +62,10 @@ PhysicsEntity = Class{
         Entity.delete(self)
     end;
 
+    -- Reimplement
+    wasHit = function(self)
+    end;
+
 
     -- Apply linear impulse with given direction and power
     punch = function(self, angle, power)

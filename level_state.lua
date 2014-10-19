@@ -153,6 +153,9 @@ function begin_contact(a, b, coll)
             bObj:setPowerUpMode(ChaingunMode())
             coll:setEnabled(false)
         else
+            aObj:wasHit()
+            bObj:wasHit()
+
             local plane = nil
             local other = nil
             if aObj:isinstance(Plane) then
