@@ -177,10 +177,7 @@ function begin_contact(a, b, coll)
             end
 
             if other and other:isinstance(Plane) then
-                plane:receiveDamage(1000)
-                other:receiveDamage(1000)
-                plane:getOwner():addScore(SUICIDE_SCORE)
-                other:getOwner():addScore(SUICIDE_SCORE)
+                -- nothing
             elseif plane then
                 if other:getOwner() == nil then
                     -- Collision with ground or other plane
