@@ -56,7 +56,13 @@ end
 
 
 function menu_state:keypressed(key, unicode)
-    Gamestate.switch(level_state)
+    if key == "c" then
+        level_state.computer = true
+        Gamestate.switch(level_state)
+    else
+        level_state.computer = false
+        Gamestate.switch(level_state)
+    end
 end
 
 

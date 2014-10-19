@@ -1,6 +1,7 @@
 Gamestate = require 'hump.gamestate'
 require 'level'
 require 'player'
+require 'computerplayer'
 require 'scoreboard'
 require 'entities/powerup'
 require 'entities/chaingunpowerup'
@@ -41,6 +42,12 @@ function level_state:enter(previous, level_file)
         level_music:setVolume(0.5)
         level_music:setLooping(true)
         level_music:play()
+    end
+
+    if self.computer then
+        players[2] = ComputerPlayer(2, 'Vengeance')
+    else
+        players[2] = Player(2, 'Nicd')
     end
 
     love.graphics.setBackgroundColor({0, 0, 0, 255})
