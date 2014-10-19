@@ -12,8 +12,8 @@ TinyShot = Class{
     frame = 0,
 
     init = function(self, x, y, level)
-        local xsize = 0.2 * PIXELS_PER_METER
-        local ysize = 0.2 * PIXELS_PER_METER
+        local xsize = 0.3 * PIXELS_PER_METER
+        local ysize = 0.3 * PIXELS_PER_METER
 
         Rectangle.init(self, x, y, level, "dynamic", 0.2, xsize, ysize, 1000, nil)
         self.body:setBullet(true)
