@@ -13,6 +13,10 @@ BigBallMode = Class{
         PowerUpMode.update(self, dt)
     end;
 
+    draw = function(self, x, y)
+        PowerUpMode.draw(self, x, y)
+    end;
+
     activate = function(self, plane)
         PowerUpMode.activate(self, plane)
         plane.machinegun:setType("bigball")
@@ -20,6 +24,5 @@ BigBallMode = Class{
 
     deactivate = function(self)
         PowerUpMode.deactivate(self)
-        self.plane.machinegun:setType(PLANE_DEFAULT_GUN)
     end;
 }

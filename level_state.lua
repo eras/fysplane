@@ -191,8 +191,10 @@ function begin_contact(a, b, coll)
                         if other:isinstance(gun['projectile']) and plane.health > 0 then
                             plane:receiveDamage(gun['damage'])
 
+                            local shooter = other:getOwner():getOwner()
+                            shooter:addScore(HIT_SCORE)
                             if plane.health == 0 then
-                                other:getOwner():getOwner():addScore(KILL_SCORE)
+                                shooter:addScore(KILL_SCORE)
                             end
                         end
                     end

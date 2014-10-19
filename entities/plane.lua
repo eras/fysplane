@@ -335,6 +335,10 @@ Plane = Class{
 
             love.graphics.pop()
             drawDebug(self.debugVectors)
+
+            if self.powerupmode ~= nil then
+                self.powerupmode:draw(self.body:getX(), self.body:getY())
+            end
         end
     end;
 

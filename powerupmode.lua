@@ -10,7 +10,7 @@ PowerUpMode = Class{
     end;
 
     update = function(self, dt)
-        if active then
+        if self.active then
             self.age = self.age + dt
         end
 
@@ -20,11 +20,11 @@ PowerUpMode = Class{
     end;
 
     draw = function(self, x, y)
-        local age = self.age / self.duration
-        local start_color = {0, 255, 0}
-        local end_color = {255, 0, 0}
+        local age_ratio = self.age / self.duration
+        local start_color = {255, 0, 0}
+        local end_color = {0, 255, 0}
         love.graphics.setColor(colorSlide(start_color, end_color, age_ratio))
-        love.graphics.rectangle("fill", self.x, self.y + 60, 50, 5)
+        love.graphics.rectangle("fill", x, y + 60, 50 * (1 - age_ratio), 5)
     end;
 
     activate = function(self, plane)
@@ -35,5 +35,6 @@ PowerUpMode = Class{
 
     deactivate = function(self)
         self.plane.powerupmode = nil
+        self.plane.machinegun:setType(PLANE_DEFAULT_GUN)
     end;
 }
