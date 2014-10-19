@@ -55,7 +55,6 @@ ComputerPlayer = Class{
                 end
             end
 
-            print("angle", ang, "wantCw", wantCw, "wantCcw", wantCcw)
             self.plane:cw(wantCw)
             self.plane:ccw(wantCcw)
         end
