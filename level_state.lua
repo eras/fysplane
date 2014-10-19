@@ -166,14 +166,21 @@ function begin_contact(a, b, coll)
             if other and other:isinstance(Plane) then
                 plane:receiveDamage(1000)
                 other:receiveDamage(1000)
+                plane:getOwner():addScore(SUICIDE_SCORE)
+                other:getOwner():addScore(SUICIDE_SCORE)
             elseif plane then
                 if other:getOwner() == nil then
                     -- Collision with ground or other plane
                     plane:receiveDamage(1000)
+                    plane:getOwner():addScore(SUICIDE_SCORE)
                 elseif other:getOwner().id ~= plane.id then
                     for key, gun in pairs(GUNS) do
-                        if other:isinstance(gun['projectile']) then
+                        if other:isinstance(gun['projectile']) and plane.health > 0 then
                             plane:receiveDamage(gun['damage'])
+
+                            if plane.health == 0 then
+                                other:getOwner():getOwner():addScore(KILL_SCORE)
+                            end
                         end
                     end
                 end

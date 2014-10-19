@@ -41,6 +41,10 @@ Player = Class{
         return self.plane
     end;
 
+    addScore = function(self, score)
+        self.score = self.score + score
+    end;
+
     press = function(self, key)
         for action, keycode in pairs(self.keys) do
             if key == keycode then
