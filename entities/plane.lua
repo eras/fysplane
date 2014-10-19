@@ -87,9 +87,16 @@ Plane = Class{
         local oldHealth = self.health
         self.health = math.max(0, self.health - amount);
         if oldHealth > 0 and self.health == 0 then
-            Animation(self.body:getX(), self.body:getY(), self.level, 
-                      "resources/graphics/explosion-%04d.png", 36, 15)
+            self:die();
         end
+    end;
+
+    die = function(self) 
+        self.health = 0
+        Animation(self.body:getX(), self.body:getY(), self.level, 
+                  "resources/graphics/explosion-%04d.png", 36, 15)
+        self:getOwner():setPlane(nil)
+        self:delete()
     end;
 
     getGunPosition = function(self)

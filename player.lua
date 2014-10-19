@@ -31,13 +31,16 @@ Player = Class{
 
     setPlane = function(self, plane)
         self.plane = plane
+        if plane ~= nil then
+            plane:setOwner(self)
+        end
     end;
 
     press = function(self, key)
         for action, keycode in pairs(self.keys) do
             if key == keycode then
                 print(self.name .. ' pressed ' .. action .. '!')
-                if self.actions[action] then
+                if self.actions[action] and self.plane then
                     self.actions[action](true)
                 end
             end
@@ -48,7 +51,7 @@ Player = Class{
         for action, keycode in pairs(self.keys) do
             if key == keycode then
                 print(self.name .. ' released ' .. action .. '!')
-                if self.actions[action] then
+                if self.actions[action] and self.plane then
                     self.actions[action](false)
                 end
             end
