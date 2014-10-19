@@ -206,7 +206,17 @@ function end_contact(a, b, coll)
 end
 
 function pre_solve(a, b, coll)
-
+    if aObj ~= nil and bObj ~= nil then
+        if aObj:isinstance(Plane) and bObj:isinstance(PowerUp) then
+            bObj.deleteLater = true
+            aObj:setPowerUpMode(bObj.mode)
+            coll:setEnabled(false)
+        elseif bObj:isinstance(Plane) and aObj:isinstance(PowerUp) then
+            aObj.deleteLater = true
+            bObj:setPowerUpMode(bObj.mode)
+            coll:setEnabled(false)
+        end
+    end
 end
 
 function end_solve(a, b, coll)
