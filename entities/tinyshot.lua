@@ -15,8 +15,10 @@ TinyShot = Class{
         local xsize = 0.3 * PIXELS_PER_METER
         local ysize = 0.3 * PIXELS_PER_METER
 
-        Rectangle.init(self, x, y, level, "dynamic", 0.2, xsize, ysize, 1000, nil)
+        Rectangle.init(self, x, y, level, "dynamic", 0.2, xsize, ysize, 1, nil)
         self.body:setBullet(true)
+        self.collisionCategory = 3
+        self.fixture:setCategory(self.collisionCategory)
 
         TINYSHOT_SOUND:rewind()
         TINYSHOT_SOUND:play()

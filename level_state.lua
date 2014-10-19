@@ -144,10 +144,6 @@ function begin_contact(a, b, coll)
     local bObj = b:getUserData()
 
     if aObj ~= nil and bObj ~= nil then
-        if aObj:isinstance(ChaingunPowerUp) or bObj:isinstance(ChaingunPowerUp) then
-            coll:setEnabled(false)
-        end
-
         if aObj:isinstance(Plane) and bObj:isinstance(ChaingunPowerUp) then
             bObj.deleteLater = true
             aObj:setPowerUpMode(ChaingunMode())
@@ -157,13 +153,6 @@ function begin_contact(a, b, coll)
             bObj:setPowerUpMode(ChaingunMode())
             coll:setEnabled(false)
         else
-            if aObj:isinstance(Plane) and (bObj:getOwner() == nil or bObj:getOwner().id ~= aObj.id) then
-                aObj:receiveDamage(1000);
-            end
-            if bObj:isinstance(Plane) and (aObj:getOwner() == nil or aObj:getOwner().id ~= bObj.id) then
-                bObj:receiveDamage(1000);
-            end
-
             local plane = nil
             local other = nil
             if aObj:isinstance(Plane) then
@@ -174,7 +163,10 @@ function begin_contact(a, b, coll)
                 other = aObj
             end
 
-            if plane then
+            if other and other:isinstance(Plane) then
+                plane:receiveDamage(1000)
+                other:receiveDamage(1000)
+            elseif plane then
                 if other:getOwner() == nil then
                     -- Collision with ground or other plane
                     plane:receiveDamage(1000)

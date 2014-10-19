@@ -12,6 +12,8 @@ PhysicsEntity = Class{
         self.restitution = restitution
         self.deleteLater = false
 
+        self.collisionCategory = 1
+
         self:initPhysics(self)
     end;
 
@@ -30,6 +32,9 @@ PhysicsEntity = Class{
 
         -- Add reference to this object so we can get it in collisions
         self.fixture:setUserData(self)
+
+        -- Set category of this physicsentity to help mask collisions
+        self.fixture:setCategory(self.collisionCategory)
     end;
 
     -- Reimplement

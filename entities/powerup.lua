@@ -14,7 +14,11 @@ PowerUp = Class{
         self.lifetime = lifetime
 
         self.shape = love.physics.newCircleShape(radius)
+        self.collisionCategory = 2
         PhysicsEntity.attachShape(self, 1)
+
+        -- Don't collide with ammo
+        self.fixture:setMask(3)
     end;
 
     draw = function(self)

@@ -87,15 +87,15 @@ Plane = Class{
         self.powerupmode = nil
     end;
 
-    receiveDamage = function(self, amount) 
+    receiveDamage = function(self, amount)
         local oldHealth = self.health
         self.health = math.max(0, self.health - amount);
         if oldHealth > 0 and self.health == 0 then
-            self:die();
+            self:die()
         end
     end;
 
-    die = function(self) 
+    die = function(self)
         self.health = 0
         Animation(self.body:getX(), self.body:getY(), self.level, explosionFrames)
         self:getOwner():setPlane(nil)

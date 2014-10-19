@@ -15,8 +15,11 @@ Vickers77 = Class{
         local xsize = 1 * PIXELS_PER_METER
         local ysize = 0.4 * PIXELS_PER_METER
 
-        Rectangle.init(self, x, y, level, "dynamic", 0.2, xsize, ysize, 1000, nil)
+        self.collisionCategory = 3
+        Rectangle.init(self, x, y, level, "dynamic", 0.2, xsize, ysize, 1, nil)
         self.body:setBullet(true)
+        self.collisionCategory = 3
+        self.fixture:setCategory(self.collisionCategory)
 
         VICKERS_SOUND:rewind()
         VICKERS_SOUND:play()

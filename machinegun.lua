@@ -9,14 +9,14 @@ GUNS = {
         interval = 0.01,
         force = 150000,
         projectile = TinyShot,
-        damage = 1
+        damage = 5
     },
 
     vickers77 = {
         interval = 0.1,
         force = 300000,
         projectile = Vickers77,
-        damage = 10
+        damage = 25
     }
 }
 
