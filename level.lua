@@ -1,5 +1,6 @@
 Class = require 'hump.class'
 require 'entities/rectangle'
+require 'entities/ground'
 require 'entities/plane'
 require 'entities/physicsentity'
 require 'settings'
@@ -37,7 +38,7 @@ Level = Class{
 
         self.planes = { [1] = self.makePlanes[1](),
                         [2] = self.makePlanes[2]() }
-        self:insertGround()
+	Ground(self);
     end;
 
     respawnPlayer = function(self, playerIdx)
@@ -88,13 +89,5 @@ Level = Class{
             end
             entity:update(dt)
         end
-    end;
-
-    insertGround = function(self)
-        groundImg = love.graphics.newImage('resources/graphics/ground.png')
-
-	Rectangle((love.window.getWidth() - 1600) / 2, love.window.getHeight(),
-		  self, "static",
-		  0, 1600, 20, 0, groundImg)
     end;
 }
