@@ -2,6 +2,7 @@ Gamestate = require 'hump.gamestate'
 require 'level'
 require 'player'
 require 'computerplayer'
+require 'nullplayer'
 require 'scoreboard'
 require 'entities/powerup'
 require 'entities/chaingunpowerup'
@@ -47,7 +48,9 @@ function level_state:enter(previous, level_file)
         level_music:play()
     end
 
-    if self.computer then
+    if self.mode == "solo" then
+        players[2] = NullPlayer(2, "Null")
+    elseif self.mode == "computer" then
         players[2] = ComputerPlayer(2, 'Vengeance')
     else
         players[2] = Player(2, 'Nicd')
@@ -61,7 +64,9 @@ function level_state:enter(previous, level_file)
     current_level.world:setCallbacks(begin_contact, end_contact, pre_solve, post_solve)
 
     players[1]:setPlane(current_level:getPlane(1))
-    players[2]:setPlane(current_level:getPlane(2))
+    if players[2] then
+	players[2]:setPlane(current_level:getPlane(2))
+    end
 
     -- Set up scoreboards
     for i = 1, #players, 1 do
