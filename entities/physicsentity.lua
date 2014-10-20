@@ -63,7 +63,7 @@ PhysicsEntity = Class{
     end;
 
     -- Reimplement
-    wasHit = function(self)
+    wasHitBy = function(self, by)
     end;
 
 

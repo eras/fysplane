@@ -180,7 +180,7 @@ Plane = Class{
         end
     end;
 
-    wasHit = function(self)
+    wasHitBy = function(self, by)
         local i = love.math.random(#CLANG_SFX)
         CLANG_SFX[i]:play()
     end;

@@ -28,7 +28,7 @@ PowerUp = Class{
         -- Noop, implement in child
     end;
 
-    wasHit = function(self)
+    wasHitBy = function(self, by)
         HIT_SOUND:rewind()
         HIT_SOUND:play()
     end;

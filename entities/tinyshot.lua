@@ -36,7 +36,7 @@ TinyShot = Class{
         end
     end;
 
-    wasHit = function(self)
+    wasHitBy = function(self, by)
         Animation(self.body:getX(), self.body:getY(), self.level, explosionFrames)
     end;
 

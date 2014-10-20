@@ -177,18 +177,18 @@ function begin_contact(a, b, coll)
 
     if aObj ~= nil and bObj ~= nil then
         if aObj:isinstance(Plane) and bObj:isinstance(PowerUp) then
-	    bObj:wasHit()
+	    bObj:wasHitBy()
             bObj.deleteLater = true
             aObj:setPowerUpMode(bObj.mode)
             coll:setEnabled(false)
         elseif bObj:isinstance(Plane) and aObj:isinstance(PowerUp) then
-	    aObj:wasHit()
+	    aObj:wasHitBy()
             aObj.deleteLater = true
             bObj:setPowerUpMode(bObj.mode)
             coll:setEnabled(false)
         else
-            aObj:wasHit()
-            bObj:wasHit()
+            aObj:wasHitBy(bObj)
+            bObj:wasHitBy(aObj)
 
             local plane = nil
             local other = nil
