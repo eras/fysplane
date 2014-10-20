@@ -92,9 +92,12 @@ Plane = Class{
 
     orientationAngle = 0,
 
-    init = function(self, x, y, xDir, yDir, level)
+    init = function(self, x, y, xDir, yDir, r, g, b, level)
         local density = 50
         PhysicsEntity.init(self, x, y, level, "dynamic", 0.2)
+	self.r = r
+	self.g = g
+	self.b = b
         self.level = level
         self.xsize = 4.0 * PIXELS_PER_METER
         self.ysize = 4.3 * PIXELS_PER_METER
@@ -352,6 +355,7 @@ Plane = Class{
             PhysicsEntity.draw(self)
             love.graphics.push()
 
+	    love.graphics.setColor(self.r, self.g, self.b);
             if self.goingRight then
                 love.graphics.translate(self.body:getX(), self.body:getY())
                 love.graphics.scale(-1, 1)
