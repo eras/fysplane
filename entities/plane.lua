@@ -3,6 +3,7 @@ require 'entities/physicsentity'
 require 'settings'
 require 'entities/debug'
 require 'entities/animation'
+require 'entities/ground'
 Matrix = require 'matrix'
 VectorLight = require 'hump/vector-light'
 require 'utils'
@@ -112,7 +113,7 @@ Plane = Class{
         -- self.body:setMassData(self.xsize / 2, 0, 430, 158194)
         self.body:setMassData(7, 5, 800, 558194.140625)
         self.body:setAngularDamping(0.1)
-        self.fixture:setFriction(0)
+        self.fixture:setFriction(0.5)
         self.angle = 0
 
         --x	16	y	17.200000762939	mass	3520	inertia	1942476.875
@@ -181,8 +182,19 @@ Plane = Class{
     end;
 
     wasHitBy = function(self, by)
-        local i = love.math.random(#CLANG_SFX)
-        CLANG_SFX[i]:play()
+	if by:isinstance(Ground) then
+	    local angle = self.body:getAngle()
+	    if (not goingRight and (angle > -math.pi / 4 and angle < math.pi / 4)) or
+		(goingRight and (angle > math.pi - math.pi / 4 and angle < math.pi + math.pi / 4)) then
+		-- don't die this time.
+	    else
+		self:receiveDamage(1000)
+		self:getOwner():addScore(SUICIDE_SCORE)
+	    end
+	elseif not by:isinstance(Ground) then
+	    local i = love.math.random(#CLANG_SFX)
+	    CLANG_SFX[i]:play()
+	end
     end;
 
     update = function(self, dt)

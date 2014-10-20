@@ -10,5 +10,7 @@ Ground = Class{
 		       (love.window.getWidth() - 1600) / 2, love.window.getHeight(),
 		       level, "static",
 		       0, 1600, 20, 0, groundImg)
+	self.fixture:setRestitution(0)
+	self.fixture:setFriction(0.5)
     end;
 }
