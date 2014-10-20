@@ -24,7 +24,10 @@ local scoreboards = {}
 local level_music = nil
 local current_level = nil
 local paused = false
+local level_time = 0.0
+local updated_time = 0.0
 
+local PHYSICS_STEP = 0.001
 local POWERUP_POSSIBILITY = 0.001
 
 local POWERUPS = {
@@ -49,6 +52,9 @@ function level_state:enter(previous, level_file)
     else
         players[2] = Player(2, 'Nicd')
     end
+
+    level_time = 0.0
+    updated_time = 0.0
 
     love.graphics.setBackgroundColor({0, 0, 0, 255})
     current_level = Level()
@@ -87,22 +93,29 @@ function level_state:update(dt)
         return
     end
 
-    -- Generate powerups
-    local r = love.math.random()
+    level_time = level_time + dt
+    
+    dt = PHYSICS_STEP
+    while updated_time < level_time do
+	updated_time = updated_time + dt
 
-    if r <= POWERUP_POSSIBILITY then
-        local x = love.math.random(love.window.getWidth())
-        local y = love.math.random(love.window.getHeight())
+	-- Generate powerups
+	local r = love.math.random()
 
-        POWERUPS[love.math.random(1, #POWERUPS)](x, y, current_level)
+	if r <= POWERUP_POSSIBILITY then
+	    local x = love.math.random(love.window.getWidth())
+	    local y = love.math.random(love.window.getHeight())
+
+	    POWERUPS[love.math.random(1, #POWERUPS)](x, y, current_level)
+	end
+
+	if not paused then
+	    current_level:updateEntities(dt)
+	end
+
+	players[1]:update(dt)
+	players[2]:update(dt)
     end
-
-    if not paused then
-        current_level:updateEntities(dt)
-    end
-
-    players[1]:update(dt)
-    players[2]:update(dt)
 
     if players[1]:getPlane() == nil then
         current_level:respawnPlayer(1)
