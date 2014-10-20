@@ -3,6 +3,7 @@ require 'entities/physicsentity'
 
 -- rad per second
 local ROTATION_SPEED = math.pi / 2
+local HIT_SOUND = love.audio.newSource("resources/audio/PowerUp.wav", "static")
 
 PowerUp = Class{
     __includes = PhysicsEntity,
@@ -27,6 +28,11 @@ PowerUp = Class{
         -- Noop, implement in child
     end;
 
+    wasHit = function(self)
+        HIT_SOUND:rewind()
+        HIT_SOUND:play()
+    end;
+    
     update = function(self, dt)
         PhysicsEntity.update(self, dt)
 

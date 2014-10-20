@@ -164,10 +164,12 @@ function begin_contact(a, b, coll)
 
     if aObj ~= nil and bObj ~= nil then
         if aObj:isinstance(Plane) and bObj:isinstance(PowerUp) then
+	    bObj:wasHit()
             bObj.deleteLater = true
             aObj:setPowerUpMode(bObj.mode)
             coll:setEnabled(false)
         elseif bObj:isinstance(Plane) and aObj:isinstance(PowerUp) then
+	    aObj:wasHit()
             aObj.deleteLater = true
             bObj:setPowerUpMode(bObj.mode)
             coll:setEnabled(false)
