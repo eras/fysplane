@@ -91,10 +91,10 @@ Level = Class{
     end;
 
     insertGround = function(self)
-        groundImg = love.graphics.newImage('tiles/grasstop.png')
+        groundImg = love.graphics.newImage('resources/graphics/ground.png')
 
-        for i = -10, love.window.getWidth() / 16 + 10, 1 do
-            Rectangle(i * 16, love.window.getHeight(), self, "static", 0, 16, 16, 0, groundImg)
-        end
+	Rectangle((love.window.getWidth() - 1600) / 2, love.window.getHeight(),
+		  self, "static",
+		  0, 1600, 20, 0, groundImg)
     end;
 }
