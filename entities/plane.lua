@@ -61,6 +61,7 @@ local nor_frict_coeff = 0.5
 local tail_frict_coeff = 0.5
 local tail_area = 5.0
 local turn_speed = 1.0
+local turn_air_speed_coeff = 2.0
 local wing_lift = 0.5
 local accel_speed = 400.0
 local decel_speed = 400.0
@@ -324,7 +325,7 @@ Plane = Class{
             dx, dy = 0, -turn_speed
         end
         if self.turningCw or self.turningCcw then 
-            dx, dy = VectorLight.mul(turn_speed * math.pow(fwd_vel, 2.0) -- * sign(fwd_vel)
+            dx, dy = VectorLight.mul(turn_speed * math.pow(fwd_vel * turn_air_speed_coeff, 2.0) -- * sign(fwd_vel)
                                      , dx, dy)
             -- dx, dy = VectorLight.mul(turn_speed * 10000 -- * sign(fwd_vel)
             --                          , dx, dy)
