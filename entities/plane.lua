@@ -59,6 +59,7 @@ local lift = function(angle)
 end
 
 local fwd_frict_coeff = 0.1
+local fwd_frict_coeff_decelare_multiplier = 3
 local nor_frict_coeff = 0.8
 local tail_frict_coeff = 0.4
 local tail_area = 5.0
@@ -334,6 +335,9 @@ Plane = Class{
         -- (*   (Gg.V2.smul (fwd_frict_coeff *. fwd_vel ** 2.0 *. head_area) (V.unit (negate vel))) *)
         -- (*   (to_base (Gg.V2.v 0.0 0.0)); *)
         local airdrag = coeff_multiplier * -fwd_frict_coeff * math.pow(fwd_vel, 2.0) * head_area
+	if self.decelerating then
+	    airdrag = airdrag * fwd_frict_coeff_decelare_multiplier
+	end
         rel_force("airdrag", airdrag, 0, 0, 0.2 * self.ysize)
 
         -- Air friction (and drag?) opposes movement towards plane velocity normal also
