@@ -8,22 +8,22 @@ require 'entities/bigball'
 GUNS = {
     chaingun = {
         interval = 0.01,
-        force = 150000,
         projectile = TinyShot,
+	speed = 50000,
         damage = 5
     },
 
     bigball = {
-        interval = 1,
-        force = 1000000,
+        interval = 0.2,
         projectile = BigBall,
+	speed = 5000,
         damage = 0
     },
 
     vickers77 = {
         interval = 0.1,
-        force = 300000,
         projectile = Vickers77,
+	speed = 50000,
         damage = 25
     }
 }
@@ -61,7 +61,7 @@ MachineGun = Class{
         local angle = self.plane.body:getAngle()
         shot.body:setAngle(angle)
 
-        local speeds = rad_dist_to_xy(angle, 50000)
+        local speeds = rad_dist_to_xy(angle, self.gun['speed'])
         shot.body:setLinearVelocity(speeds[1], speeds[2])
     end;
 
