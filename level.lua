@@ -77,11 +77,13 @@ Level = Class{
 
         for key, entity in pairs(self.entity_list) do
             if entity:isinstance(PhysicsEntity) then
-                while entity.body:getX() > love.window.getWidth() + 200 do
-                    entity.body:setX(entity.body:getX() - love.window.getWidth() - 300)
+	        local jump_window = 70
+		local jump_amount = 50
+                while entity.body:getX() > love.window.getWidth() + jump_window do
+                    entity.body:setX(entity.body:getX() - love.window.getWidth() - jump_window - jump_amount)
                 end
-                while entity.body:getX() < -200 do
-                    entity.body:setX(entity.body:getX() + love.window.getWidth() + 300)
+                while entity.body:getX() < -jump_window do
+                    entity.body:setX(entity.body:getX() + love.window.getWidth() + jump_window + jump_amount)
                 end
             end
             entity:update(dt)
