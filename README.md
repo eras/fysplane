@@ -10,7 +10,7 @@
 
 For Ubuntu you can find a PPA if you like to install random stuff from the Internet:
 
-    sudo apt-add-repository ppa:bartbes/love-unstable &&
+    sudo apt-add-repository ppa:bartbes/love-stable &&
     sudo apt-get update &&
     sudo apt-get install love
 
