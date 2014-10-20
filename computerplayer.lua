@@ -43,11 +43,18 @@ ComputerPlayer = Class{
             local wantCw = false
             local wantCcw = false
 
+	    self.plane:accelerate(self.plane.motorPower < 0.8 * ENGINE_MAX)
+
             if ang > math.pi - math.pi / 2 and
                 ang < math.pi + math.pi / 2 then
                 local needLift = self.plane.body:getY() > 400
                 if needLift then
-                    wantCw = true
+		    print("Ang", ang)
+		    if ang < math.pi + math.pi / 2 then
+			wantCw = true
+		    elseif ang > math.pi + math.pi / 2 then
+			wantCcw = true
+		    end
                 elseif ang > math.pi then
                     wantCcw = true
                 elseif ang < math.pi then
