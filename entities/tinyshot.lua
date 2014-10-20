@@ -42,7 +42,10 @@ TinyShot = Class{
 
     draw = function(self)
         love.graphics.setColor({255, 0, 0, 255})
-        Rectangle.draw(self)
+	local ratio = 1.0 / 2400 * PIXELS_PER_METER
+	local velX, velY = self.body:getLinearVelocity()
+	love.graphics.line(self.body:getX(), self.body:getY(),
+			   self.body:getX() + velX * ratio, self.body:getY() + velY * ratio)
     end;
 }
 
