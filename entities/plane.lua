@@ -69,6 +69,8 @@ local head_area = 1.0
 local plane_area = 10.0
 local motor_speed_ratio = 100.0
 
+local out_of_bounds_coeff_multiplier = 10.0
+
 local explosionFrames = AnimationFrames("resources/graphics/explosion-%04d.png", 36, 15, true)
 
 Plane = Class{
@@ -188,8 +190,11 @@ Plane = Class{
         self.machinegun:update(dt)
 
 
+	local coeff_multiplier = 1
+
         if self.body:getY() < 0 then
             self.motorPower = 0
+	    coeff_multiplier = out_of_bounds_coeff_multiplier
         end
 
         if self.powerupmode ~= nil then
@@ -298,18 +303,18 @@ Plane = Class{
         -- (* self#add_force "fwddrag" *)
         -- (*   (Gg.V2.smul (fwd_frict_coeff *. fwd_vel ** 2.0 *. head_area) (V.unit (negate vel))) *)
         -- (*   (to_base (Gg.V2.v 0.0 0.0)); *)
-        local airdrag = -fwd_frict_coeff * math.pow(fwd_vel, 2.0) * head_area
+        local airdrag = coeff_multiplier * -fwd_frict_coeff * math.pow(fwd_vel, 2.0) * head_area
         rel_force("airdrag", airdrag, 0, 0, 0.2 * self.ysize)
 
         -- Air friction (and drag?) opposes movement towards plane velocity normal also
         -- hdd drag
-        local hddrag_x, hddrag_y = VectorLight.mul(nor_frict_coeff * math.pow(normal_vel, 2.0) * plane_area * sign(normal_vel), 0, -1.0)
+        local hddrag_x, hddrag_y = VectorLight.mul(coeff_multiplier * nor_frict_coeff * math.pow(normal_vel, 2.0) * plane_area * sign(normal_vel), 0, -1.0)
         rel_force("hddrag", hddrag_x, hddrag_y, mass_x, mass_y);
         
         local lift_x, lift_y = VectorLight.mul(wing_lift * math.pow(fwd_vel, 2.0) * lift_coeff, 0, -1)
         rel_force("lift", lift_x, lift_y, mass_x, mass_y)
 
-        local tail_frict = tail_area * tail_frict_coeff * math.pow(normal_vel, 2.0) * -sign(normal_vel)
+        local tail_frict = tail_area * coeff_multiplier * tail_frict_coeff * math.pow(normal_vel, 2.0) * -sign(normal_vel)
         -- print("tail_speed", tail_speed)
         rel_force("tf", 0, tail_frict, -self.xsize / 2, 0)
 
