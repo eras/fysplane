@@ -56,9 +56,9 @@ local lift = function(angle)
     return 1.68429 * math.exp(-math.pow(angle / math.pi * 180.0 -17.3801, 2.0) / (2.0 * math.pow(15.0, 2.0)))
 end
 
-local fwd_frict_coeff = 0.5
-local nor_frict_coeff = 0.9
-local tail_frict_coeff = 0.5
+local fwd_frict_coeff = 0.1
+local nor_frict_coeff = 0.8
+local tail_frict_coeff = 0.4
 local tail_area = 5.0
 local turn_coeff = 500.0
 local wing_lift = 0.5
@@ -67,7 +67,7 @@ local decel_speed = 400.0
 local max_motorPower = ENGINE_MAX
 local head_area = 1.0
 local plane_area = 10.0
-local motor_speed_ratio = 100.0
+local motor_speed_ratio = 80.0
 
 local out_of_bounds_coeff_multiplier = 10.0
 
