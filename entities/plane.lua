@@ -57,11 +57,10 @@ local lift = function(angle)
 end
 
 local fwd_frict_coeff = 0.5
-local nor_frict_coeff = 0.5
+local nor_frict_coeff = 0.9
 local tail_frict_coeff = 0.5
 local tail_area = 5.0
-local turn_speed = 1.0
-local turn_air_speed_coeff = 2.0
+local turn_coeff = 500.0
 local wing_lift = 0.5
 local accel_speed = 400.0
 local decel_speed = 400.0
@@ -320,14 +319,13 @@ Plane = Class{
         --     dx, dy = VectorLight.rotate(self.angle, 0, -50000)
         -- end
         if self.turningCcw then
-            dx, dy = 0, turn_speed
+            dx, dy = 0, 1
         elseif self.turningCw then
-            dx, dy = 0, -turn_speed
+            dx, dy = 0, -1
         end
         if self.turningCw or self.turningCcw then 
-            dx, dy = VectorLight.mul(turn_speed * math.pow(fwd_vel * turn_air_speed_coeff, 2.0) -- * sign(fwd_vel)
-                                     , dx, dy)
-            -- dx, dy = VectorLight.mul(turn_speed * 10000 -- * sign(fwd_vel)
+            dx, dy = VectorLight.mul(fwd_vel * turn_coeff, dx, dy)
+            -- dx, dy = VectorLight.mul(turn_coeff * 10000 -- * sign(fwd_vel)
             --                          , dx, dy)
             -- print("dx", dx, "dy", dy, "tail_speed", tail_speed)
             -- self.body:applyForce(dx, dy, self.body:getX() + rdx, self.body:getY() + rdy)
