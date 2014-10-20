@@ -4,6 +4,7 @@ require 'settings'
 require 'entities/debug'
 require 'entities/animation'
 require 'entities/ground'
+require 'entities/arrow'
 Matrix = require 'matrix'
 VectorLight = require 'hump/vector-light'
 require 'utils'
@@ -131,6 +132,8 @@ Plane = Class{
 
         self.health = PLANE_HEALTH
         self.powerupmode = nil
+
+	self.outOfBoundsArrow = nil
     end;
 
     receiveDamage = function(self, amount)
@@ -147,6 +150,10 @@ Plane = Class{
         Animation(self.body:getX(), self.body:getY(), self.level, explosionFrames)
         self:getOwner():setPlane(nil)
         self:delete()
+    end;
+
+    delete = function(self)
+	PhysicsEntity.delete(self)
     end;
 
     getGunPosition = function(self)
@@ -210,6 +217,14 @@ Plane = Class{
         if self.body:getY() < 0 then
             self.motorPower = 0
 	    coeff_multiplier = out_of_bounds_coeff_multiplier
+
+	    if not self.outOfBoundsArrow then
+		self.outOfBoundsArrow = Arrow(0, 0, self.level, self.r, self.g, self.b)
+	    end
+	    self.outOfBoundsArrow:setX(self.body:getX())
+	elseif self.outOfBoundsArrow then
+	    self.outOfBoundsArrow:delete()
+	    self.outOfBoundsArrow = nil
         end
 
         if self.powerupmode ~= nil then
