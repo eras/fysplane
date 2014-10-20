@@ -87,7 +87,7 @@ function level_state:update(dt)
         return
     end
 
-    # TODO: temporarily halve world speed
+    -- TODO: temporarily halve world speed
     dt = 0.5 * dt
 
     -- Generate powerups
