@@ -25,10 +25,10 @@ Level = Class{
         love.graphics.setCanvas()
 
         self.makePlanes = { [1] = function()
-                                return Plane(100, 100, INITIAL_PLANE_SPEED, 0, self)
+                                return Plane(100, 300, INITIAL_PLANE_SPEED, 0, self)
                              end,
                             [2] = function()
-                                return Plane(love.window.getWidth() - 100 - 100, 100, -INITIAL_PLANE_SPEED, 0, self)
+                                return Plane(love.window.getWidth() - 100 - 100, 300, -INITIAL_PLANE_SPEED, 0, self)
                             end }
 
         self.planes = { [1] = self.makePlanes[1](),
