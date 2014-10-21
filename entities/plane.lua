@@ -135,6 +135,12 @@ Plane = Class{
         self.powerupmode = nil
 
 	self.outOfBoundsArrow = nil
+
+	self.motorSound = love.audio.newSource("resources/audio/motorsound.wav", "static")
+
+        self.motorSound:rewind()
+        self.motorSound:play()
+	self.motorSound:setLooping(true)
     end;
 
     receiveDamage = function(self, amount)
@@ -150,10 +156,12 @@ Plane = Class{
         self.machinegun:stopShooting()
         Animation(self.body:getX(), self.body:getY(), self.level, explosionFrames)
         self:getOwner():setPlane(nil)
+	self.motorSound:stop()
         self:delete()
     end;
 
     delete = function(self)
+	self.motorSound:stop()
 	PhysicsEntity.delete(self)
     end;
 
@@ -379,6 +387,9 @@ Plane = Class{
         local xy = to_base(mass_x, mass_y)
         local x, y = VectorLight.add(xy[1][1], xy[2][1], self.body:getX(), self.body:getY())
         table.insert(self.debug, DebugCircle("mc", x, y))
+
+	local motorEffort = (self.motorPower / (math.max(fwd_vel, 100) + 1) - 1) / 2 + 1
+	self.motorSound:setPitch(motorEffort * self.motorPower / ENGINE_MAX + 0.5)
     end;
 
     draw = function(self)
