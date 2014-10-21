@@ -49,7 +49,6 @@ ComputerPlayer = Class{
                 ang < math.pi + math.pi / 2 then
                 local needLift = self.plane.body:getY() > 400
                 if needLift then
-		    print("Ang", ang)
 		    if ang < math.pi + math.pi / 2 then
 			wantCw = true
 		    elseif ang > math.pi + math.pi / 2 then

@@ -122,7 +122,7 @@ Plane = Class{
         --x	0	y	0	mass	860.00006103516	inertia	158194.140625
 
         local x, y, mass, inertia = self.body:getMassData()
-        print("x", x, "y", y, "mass", mass, "inertia", inertia)
+        --print("x", x, "y", y, "mass", mass, "inertia", inertia)
 
         for frame = 0,35 do
             self.frames[frame] = love.graphics.newImage(string.format("resources/graphics/plane-%04d.png", frame))
@@ -166,7 +166,7 @@ Plane = Class{
     end;
 
     setPowerUpMode = function(self, powerupmode)
-        print("Got powerup!")
+        --print("Got powerup!")
         self.powerupmode = powerupmode
         self.powerupmode:activate(self)
     end;
