@@ -220,7 +220,12 @@ Plane = Class{
         PhysicsEntity.update(self, dt)
         self.machinegun:update(dt)
 
-
+	local dir_coeff;
+	if self.goingRight then
+	    dir_coeff = 1
+	else
+	    dir_coeff = -1
+	end
 	local coeff_multiplier = 1
 
         if self.body:getY() < 0 then
@@ -328,7 +333,7 @@ Plane = Class{
             air_wing_angle = tmp
         end
 
-        local lift_coeff = lift(-air_wing_angle)
+        local lift_coeff = lift(-air_wing_angle) * dir_coeff
 
         -- print("lift coeff: ", lift_coeff)
 
