@@ -26,7 +26,7 @@ Level = Class{
         love.graphics.setCanvas()
 
         self.makePlanes = { [1] = function()
-                                return Plane(100, 300, INITIAL_PLANE_SPEED, 0,
+                                return Plane(100, 400, INITIAL_PLANE_SPEED, 0,
 					     255, 0, 0, -- red
 					     self)
                              end,
