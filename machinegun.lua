@@ -16,7 +16,7 @@ GUNS = {
     bigball = {
         interval = 0.2,
         projectile = BigBall,
-	speed = 5000,
+	speed = 2000,
         damage = 0
     },
 
