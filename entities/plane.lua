@@ -241,9 +241,14 @@ Plane = Class{
 	end
 	local coeff_multiplier = 1
 
+        local vel_x, vel_y = self.body:getLinearVelocity()
+        local abs_vel = VectorLight.len(vel_x, vel_y)
+
         if self.body:getY() < 0 then
             self.motorPower = 0
-	    coeff_multiplier = out_of_bounds_coeff_multiplier
+	    if vel_y < 0 then
+		coeff_multiplier = out_of_bounds_coeff_multiplier
+	    end
 
 	    if not self.outOfBoundsArrow then
 		self.outOfBoundsArrow = Arrow(0, 0, self.level, self.r, self.g, self.b)
@@ -260,9 +265,6 @@ Plane = Class{
 
         self.x, self.y = self.fixture:getBoundingBox()
         self.angle = self.body:getAngle()
-
-        local vel_x, vel_y = self.body:getLinearVelocity()
-        local abs_vel = VectorLight.len(vel_x, vel_y)
 
         if self.accelerating then 
             self.motorPower = math.min(max_motorPower, self.motorPower + dt * accel_speed)
