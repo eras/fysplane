@@ -29,7 +29,7 @@ local level_time = 0.0
 local updated_time = 0.0
 
 local PHYSICS_STEP = 0.001
-local POWERUP_POSSIBILITY = 0.001
+local POWERUP_POSSIBILITY = 0.1
 
 local POWERUPS = {
     BigBallPowerUp,
@@ -107,7 +107,7 @@ function level_state:update(dt)
 	-- Generate powerups
 	local r = love.math.random()
 
-	if r <= POWERUP_POSSIBILITY then
+	if r <= POWERUP_POSSIBILITY * dt then
 	    local x = love.math.random(love.window.getWidth())
 	    local y = love.math.random(love.window.getHeight())
 
