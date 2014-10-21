@@ -9,7 +9,7 @@ local explosionFrames = AnimationFrames("resources/graphics/miniexplosion-%04d.p
 TinyShot = Class{
     __includes = Rectangle,
 
-    MAX_LIFETIME = 60 * 5,
+    MAX_LIFETIME = 60 * 1,
     img = nil,
     frame = 0,
 

@@ -8,7 +8,7 @@ local explosionFrames = AnimationFrames("resources/graphics/miniexplosion-%04d.p
 Vickers77 = Class{
     __includes = Rectangle,
 
-    MAX_LIFETIME = 60 * 5,
+    MAX_LIFETIME = 60 * 2,
     img = nil,
     frame = 0,
 
