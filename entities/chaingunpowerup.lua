@@ -9,7 +9,7 @@ ChaingunPowerUp = Class{
     __includes = PowerUp,
 
     init = function(self, x, y, level)
-        PowerUp.init(self, x, y, level, 10, 16)
+        PowerUp.init(self, x, y, level, 20, 16)
         self.mode = ChaingunMode()
     end;
 
