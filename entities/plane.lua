@@ -10,6 +10,19 @@ VectorLight = require 'hump/vector-light'
 require 'utils'
 require 'machinegun'
 
+-- normalizes angle to be between [0 .. 2 pi[
+local normalizeAngle = function(angle)
+    if angle < 0 then
+	angle = -angle
+	angle = angle - 2 * math.pi * math.floor(angle / (2 * math.pi))
+	angle = math.pi * 2 - angle
+    else
+	angle = angle - 2 * math.pi * math.floor(angle / (2 * math.pi))
+    end
+    return angle
+end
+
+
 local CLANG_SFX = {
     love.audio.newSource("resources/audio/clangs/cast iron clangs - Marker #1.wav"),
     love.audio.newSource("resources/audio/clangs/cast iron clangs - Marker #2.wav"),
@@ -199,9 +212,9 @@ Plane = Class{
 
     wasHitBy = function(self, by)
 	if by:isinstance(Ground) then
-	    local angle = self.body:getAngle()
-	    if (not goingRight and (angle > -math.pi / 4 and angle < math.pi / 4)) or
-		(goingRight and (angle > math.pi - math.pi / 4 and angle < math.pi + math.pi / 4)) then
+	    local angle = normalizeAngle(self.body:getAngle())
+	    if (self.goingRight and (angle > math.pi * 2 - math.pi / 4 or angle < math.pi / 4)) or
+		(not self.goingRight and (angle > math.pi - math.pi / 4 and angle < math.pi + math.pi / 4)) then
 		-- don't die this time.
 	    else
 		self:receiveDamage(1000)
