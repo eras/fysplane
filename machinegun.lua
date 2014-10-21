@@ -23,7 +23,7 @@ GUNS = {
     vickers77 = {
         interval = 0.1,
         projectile = Vickers77,
-	speed = 50000,
+	speed = 10000,
         damage = 25
     }
 }
