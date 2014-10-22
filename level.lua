@@ -31,7 +31,7 @@ Level = Class{
 					     self)
                              end,
                             [2] = function()
-                                return Plane(love.window.getWidth() - 100 - 100, 300, -INITIAL_PLANE_SPEED, 0,
+                                return Plane(WIDTH - 100 - 100, 300, -INITIAL_PLANE_SPEED, 0,
 					     0, 255, 0, -- green
 					     self)
                             end }
@@ -80,11 +80,11 @@ Level = Class{
             if entity:isinstance(PhysicsEntity) then
 	        local jump_window = 70
 		local jump_amount = 50
-                while entity.body:getX() > love.window.getWidth() + jump_window do
-                    entity.body:setX(entity.body:getX() - love.window.getWidth() - jump_window - jump_amount)
+                while entity.body:getX() > WIDTH + jump_window do
+                    entity.body:setX(entity.body:getX() - WIDTH - jump_window - jump_amount)
                 end
                 while entity.body:getX() < -jump_window do
-                    entity.body:setX(entity.body:getX() + love.window.getWidth() + jump_window + jump_amount)
+                    entity.body:setX(entity.body:getX() + WIDTH + jump_window + jump_amount)
                 end
             end
             entity:update(dt)

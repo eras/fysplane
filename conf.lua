@@ -1,9 +1,10 @@
 -- LÖVE configuration values
+require 'settings'
 
 function love.conf(t)
     t.window.title = "Fysplane"
-    t.window.width = 1280
-    t.window.height = 768
+    t.window.width = WIDTH
+    t.window.height = HEIGHT
     t.window.resizable = false
     t.window.vsync = true
 

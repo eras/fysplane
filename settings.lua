@@ -6,6 +6,9 @@ PIXELS_PER_METER = 8
 GRAVITY_X = 0
 GRAVITY_Y = 9.82599 * PIXELS_PER_METER
 
+WIDTH = 1280
+HEIGHT = 768
+
 KEYMAP = {
     [1] = {
         ccw        = 'k',
