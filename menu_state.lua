@@ -62,6 +62,8 @@ function menu_state:keypressed(key, unicode)
     elseif key == "c" then
         level_state.mode = "computer"
         Gamestate.switch(level_state)
+    elseif key == "escape" then
+	love.event.quit()
     else
         level_state.computer = "2player"
         Gamestate.switch(level_state)

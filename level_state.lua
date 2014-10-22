@@ -171,6 +171,8 @@ function level_state:keypressed(key, unicode)
        or love.keyboard.isDown("rctrl")) then
 
         current_level.reset = true
+    elseif key == "escape" then
+        Gamestate.switch(menu_state)
     elseif key == "d"
        and (love.keyboard.isDown("lctrl")
        or love.keyboard.isDown("rctrl")) then
