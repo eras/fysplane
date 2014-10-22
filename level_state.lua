@@ -36,6 +36,8 @@ local POWERUPS = {
     ChaingunPowerUp
 }
 
+local joysticks = {}
+
 function level_state:init()
 end
 
@@ -58,6 +60,10 @@ function level_state:enter(previous, level_file)
 
     level_time = 0.0
     updated_time = 0.0
+
+    for i, joystick in ipairs(love.joystick.getJoysticks()) do
+	joysticks[i] = joystick
+    end
 
     love.graphics.setBackgroundColor({0, 0, 0, 255})
     current_level = Level()
@@ -99,6 +105,21 @@ function level_state:update(dt)
     end
 
     level_time = level_time + dt
+
+    for player = 1, #players, 1 do
+	local j = joysticks[player]
+	if j then
+	    local buttons = {}
+	    for i = 1, j:getButtonCount(), 1 do
+		buttons[i] = j:isDown(i)
+	    end
+	    local x1, y1, x2, y2 = j:getAxes()
+	    if #buttons >= 8 and y2 ~= nil then
+		-- button mapping suitable for XBox original controller
+		players[player]:joystick(x2, y2, x1, y1, buttons[8], buttons[7])
+	    end
+	end
+    end
     
     dt = PHYSICS_STEP
     while updated_time < level_time do

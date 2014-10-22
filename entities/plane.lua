@@ -108,6 +108,14 @@ Plane = Class{
 
     orientationAngle = 0,
 
+    controlX = 0,
+    controlY = 0,
+    throttleX = 0,
+    throttleY = 0,
+
+    kbdShooting = false,
+    joyShooting = false,
+
     init = function(self, x, y, xDir, yDir, r, g, b, level)
         local density = 50
         PhysicsEntity.init(self, x, y, level, "dynamic", 0.2)
@@ -166,7 +174,11 @@ Plane = Class{
 
     die = function(self)
         self.health = 0
-        self.machinegun:stopShooting()
+	if self.joyShooting or self.kbdShooting then
+	    self.machinegun:stopShooting()
+	end
+	self.joyShooting = false
+	self.kbdShooting = false
         Animation(self.body:getX(), self.body:getY(), self.level, explosionFrames)
         self:getOwner():setPlane(nil)
 	self.motorSound:stop()
@@ -203,9 +215,15 @@ Plane = Class{
     shoot = function(self, down)
         if self.health > 0 then
             if down then
-                self.machinegun:startShooting()
+		if not kbdShooting and not joyShooting then
+		    self.machinegun:startShooting()
+		end
+		kbdShooting = true
             else
-                self.machinegun:stopShooting()
+		kbdShooting = false
+		if not kbdShooting and not joyShooting then
+		    self.machinegun:stopShooting()
+		end
             end
         end
     end;
@@ -269,9 +287,10 @@ Plane = Class{
         if self.accelerating then 
             self.motorPower = math.min(max_motorPower, self.motorPower + dt * accel_speed)
         end
-        if self.decelerating then
-            self.motorPower = math.max(0.0, self.motorPower - dt * accel_speed)
+        if self.decelerating or self.brake then
+            self.motorPower = math.max(0.0, self.motorPower - dt * decel_speed)
         end
+	self.motorPower = math.max(0.0, math.min(max_motorPower, self.motorPower + dt * self.throttleY * accel_speed))
 
         -- -- local base = 
         -- let base = V.base (V.vec_of_ang (~-(body#get_angle))) in
@@ -385,13 +404,16 @@ Plane = Class{
         -- elseif self.turningCw then
         --     dx, dy = VectorLight.rotate(self.angle, 0, -50000)
         -- end
+	dy = 0
         if self.turningCcw then
-            dx, dy = 0, 1
+            dy = 1
         elseif self.turningCw then
-            dx, dy = 0, -1
+            dy = -1
+	else
+	    dy = self.controlY
         end
-        if self.turningCw or self.turningCcw then 
-            dx, dy = VectorLight.mul(fwd_vel * turn_coeff, dx, dy)
+        if dy ~= 0 then 
+            dx, dy = VectorLight.mul(fwd_vel * turn_coeff, 0, dy)
             -- dx, dy = VectorLight.mul(turn_coeff * 10000 -- * sign(fwd_vel)
             --                          , dx, dy)
             -- print("dx", dx, "dy", dy, "tail_speed", tail_speed)
@@ -440,6 +462,29 @@ Plane = Class{
 
     ccw = function(self, isTurning)
         self.turningCcw = isTurning
+    end;
+
+    analog = function(self, controlX, controlY, throttleX, throttleY, fire, brake)
+        if self.health > 0 then
+	    self.controlX = controlX
+	    self.controlY = controlY
+	    self.throttleX = throttleX
+	    self.throttleY = -throttleY
+	    self.fire = fire
+	    self.brake = brake
+
+            if fire then
+		if not kbdShooting and not joyShooting then
+		    self.machinegun:startShooting()
+		end
+		joyShooting = true
+            else
+		joyShooting = false
+		if not kbdShooting and not joyShooting then
+		    self.machinegun:stopShooting()
+		end
+            end
+        end
     end;
 }
 

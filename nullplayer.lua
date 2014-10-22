@@ -35,4 +35,7 @@ NullPlayer = Class{
 
     release = function(self, key)
     end;
+
+    joystick = function(self, ...)
+    end;
 }

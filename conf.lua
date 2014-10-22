@@ -1,9 +1,6 @@
 -- LÖVE configuration values
 
 function love.conf(t)
-    -- Disable unneeded modules
-    t.modules.joystick = false
-
     t.window.title = "Fysplane"
     t.window.width = 1280
     t.window.height = 768

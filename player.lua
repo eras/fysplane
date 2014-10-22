@@ -67,4 +67,8 @@ Player = Class{
             end
         end
     end;
+
+    joystick = function(self, ...)
+	self.plane:analog(...)
+    end
 }
