@@ -48,11 +48,18 @@ ComputerPlayer = Class{
             if ang > math.pi - math.pi / 2 and
                 ang < math.pi + math.pi / 2 then
                 local needLift = self.plane.body:getY() > 400
+		local needDive = self.plane.body:getY() < 200
                 if needLift then
-		    if ang < math.pi + math.pi / 2 then
+		    if ang < math.pi + math.pi / 4 then
 			wantCw = true
-		    elseif ang > math.pi + math.pi / 2 then
+		    elseif ang > math.pi + math.pi / 4 then
 			wantCcw = true
+		    end
+                elseif needDive then
+		    if ang < math.pi + math.pi / 4 then
+			wantCcw = true
+		    elseif ang > math.pi + math.pi / 4 then
+			wantCw = true
 		    end
                 elseif ang > math.pi then
                     wantCcw = true
