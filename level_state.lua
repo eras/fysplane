@@ -116,7 +116,7 @@ function level_state:update(dt)
 	    local x1, y1, x2, y2 = j:getAxes()
 	    if #buttons >= 8 and y2 ~= nil then
 		-- button mapping suitable for XBox original controller
-		players[player]:joystick(x2, y2, x1, y1, buttons[8], buttons[7])
+		players[player]:joystick(y2 - x2, x1, y1, buttons[8], buttons[7])
 	    end
 	end
     end

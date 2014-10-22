@@ -464,9 +464,8 @@ Plane = Class{
         self.turningCcw = isTurning
     end;
 
-    analog = function(self, controlX, controlY, throttleX, throttleY, fire, brake)
+    analog = function(self, controlY, throttleX, throttleY, fire, brake)
         if self.health > 0 then
-	    self.controlX = controlX
 	    self.controlY = controlY
 	    self.throttleX = throttleX
 	    self.throttleY = -throttleY
