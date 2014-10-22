@@ -215,13 +215,13 @@ Plane = Class{
     shoot = function(self, down)
         if self.health > 0 then
             if down then
-		if not kbdShooting and not joyShooting then
+		if not self.kbdShooting and not self.joyShooting then
 		    self.machinegun:startShooting()
 		end
-		kbdShooting = true
+		self.kbdShooting = true
             else
-		kbdShooting = false
-		if not kbdShooting and not joyShooting then
+		self.kbdShooting = false
+		if not self.kbdShooting and not self.joyShooting then
 		    self.machinegun:stopShooting()
 		end
             end
@@ -473,13 +473,13 @@ Plane = Class{
 	    self.brake = brake
 
             if fire then
-		if not kbdShooting and not joyShooting then
+		if not self.kbdShooting and not self.joyShooting then
 		    self.machinegun:startShooting()
 		end
-		joyShooting = true
+		self.joyShooting = true
             else
-		joyShooting = false
-		if not kbdShooting and not joyShooting then
+		self.joyShooting = false
+		if not self.kbdShooting and not self.joyShooting then
 		    self.machinegun:stopShooting()
 		end
             end
