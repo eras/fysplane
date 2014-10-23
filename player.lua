@@ -52,23 +52,29 @@ Player = Class{
     end;
 
     press = function(self, key)
+	local found = false
         for action, keycode in pairs(self.keys) do
             if key == keycode then
+		found = true
                 if self.actions[action] and self.plane then
                     self.actions[action](true)
                 end
             end
         end
+	return found
     end;
 
     release = function(self, key)
+	local found = false
         for action, keycode in pairs(self.keys) do
             if key == keycode then
+		found = true
                 if self.actions[action] and self.plane then
                     self.actions[action](false)
                 end
             end
         end
+	return found
     end;
 
     joystick = function(self, ...)

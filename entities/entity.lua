@@ -36,16 +36,3 @@ Entity = Class{
         self.level.entity_list[self.id] = nil
     end;
 }
-
-function drawEntities()
-    -- Do we need ordering? If so, use ipairs instead of pairs
-    for key, entity in pairs(entity_list) do
-        entity:draw()
-    end
-end
-
-function updateEntities(dt)
-    for key, entity in pairs(entity_list) do
-        entity:update(dt)
-    end
-end

@@ -13,21 +13,19 @@ KEYMAP = {
     [1] = {
         ccw        = 'k',
         cw         = 'l',
-        flip       = 'i',
+        flip       = ',',
         shoot      = 'o',
         accelerate = 'j',
-        decelerate = 'm',
-        flip       = ','
+        decelerate = 'm'
     },
 
     [2] = {
         ccw        = 'a',
         cw         = 's',
-        flip       = 'q',
+        flip       = 'a',
         shoot      = 'w',
         accelerate = 'x',
-        decelerate = 'z',
-        flip       = 'a'
+        decelerate = 'z'
     }
 }
 

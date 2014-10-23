@@ -22,6 +22,7 @@ Level = Class{
         self.background = love.graphics.newImage('resources/graphics/sky.png')
         self.bgCanvas = love.graphics.newCanvas()
         love.graphics.setCanvas(self.bgCanvas)
+	love.graphics.setColor(255, 255, 255, 255)
         love.graphics.draw(self.background)
         love.graphics.setCanvas()
 

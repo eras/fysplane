@@ -178,12 +178,14 @@ function level_state:keypressed(key, unicode)
        or love.keyboard.isDown("rctrl")) then
 
         debugEnabled = not debugEnabled
-    elseif key == " " then
-        paused = not paused
     else
+	local found = false
         for id, player in pairs(players) do
-            player:press(key)
+            found = player:press(key) or found
         end
+	if not found and (key == " " or key == "p") then
+	    paused = not paused
+	end
     end
 end
 
