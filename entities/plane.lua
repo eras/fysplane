@@ -117,6 +117,8 @@ Plane = Class{
     kbdShooting = false,
     joyShooting = false,
 
+    contactingGround = false,
+
     init = function(self, x, y, xDir, yDir, r, g, b, level)
         local density = 50
         PhysicsEntity.init(self, x, y, level, "dynamic", 0.2)
@@ -237,11 +239,19 @@ Plane = Class{
         end
     end;
 
+    noLongerHitBy = function(self, by)
+	if by:isinstance(Ground) then
+	    self.contactingGround = false
+	end
+    end;
+
     wasHitBy = function(self, by)
 	if by:isinstance(Ground) then
 	    local angle = normalizeAngle(self.body:getAngle())
-	    if (self.goingRight and (angle > math.pi * 2 - math.pi / 4 or angle < math.pi / 4)) or
-		(not self.goingRight and (angle > math.pi - math.pi / 4 and angle < math.pi + math.pi / 4)) then
+	    self.contactingGround = true
+	    if self.flipping == nil and 
+		((self.goingRight and (angle > math.pi * 2 - math.pi / 4 or angle < math.pi / 4)) or
+		 (not self.goingRight and (angle > math.pi - math.pi / 4 and angle < math.pi + math.pi / 4))) then
 		-- don't die this time.
 	    else
 		self:receiveDamage(1000)
@@ -443,20 +453,24 @@ Plane = Class{
 	self.motorSound:setPitch(motorEffort * self.motorPower / ENGINE_MAX + 0.5)
 
 	if self.flipping ~= nil then
-	    self.flipping = self.flipping + flipping_speed * dt * fwd_vel
-	    local finished = self.flipping <= -1.0 or self.flipping >= 1.0
-	    if finished then
-		self.flipping = 1.0
-	    end
-	    if self.goingRight then
-		self.orientationAngle = 180 * self.flipping
+	    if self.contactingGround then
+		self:die()
 	    else
-		self.orientationAngle = 180 + 180 * self.flipping
-	    end
-	    self.orientationAngle = self.orientationAngle % 360
-	    if finished then
-		self.goingRight = not self.goingRight
-		self.flipping = nil
+		self.flipping = self.flipping + flipping_speed * dt * fwd_vel
+		local finished = self.flipping <= -1.0 or self.flipping >= 1.0
+		if finished then
+		    self.flipping = 1.0
+		end
+		if self.goingRight then
+		    self.orientationAngle = 180 * self.flipping
+		else
+		    self.orientationAngle = 180 + 180 * self.flipping
+		end
+		self.orientationAngle = self.orientationAngle % 360
+		if finished then
+		    self.goingRight = not self.goingRight
+		    self.flipping = nil
+		end
 	    end
 	end
     end;

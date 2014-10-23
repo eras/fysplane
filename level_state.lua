@@ -252,7 +252,13 @@ function begin_contact(a, b, coll)
 end
 
 function end_contact(a, b, coll)
+    local aObj = a:getUserData()
+    local bObj = b:getUserData()
 
+    if aObj ~= nil and bObj ~= nil then
+	aObj:noLongerHitBy(bObj)
+	bObj:noLongerHitBy(aObj)
+    end
 end
 
 function pre_solve(a, b, coll)

@@ -67,6 +67,11 @@ PhysicsEntity = Class{
     end;
 
 
+    -- Reimplement
+    noLongerHitBy = function(self, by)
+    end;
+
+
     -- Apply linear impulse with given direction and power
     punch = function(self, angle, power)
         local forces = rad_dist_to_xy(angle, power)
