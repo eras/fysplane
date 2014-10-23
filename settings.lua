@@ -15,8 +15,9 @@ KEYMAP = {
         cw         = 'l',
         flip       = 'i',
         shoot      = 'o',
-        accelerate   = 'j',
-        decelerate = 'm'
+        accelerate = 'j',
+        decelerate = 'm',
+        flip       = ','
     },
 
     [2] = {
@@ -24,8 +25,9 @@ KEYMAP = {
         cw         = 's',
         flip       = 'q',
         shoot      = 'w',
-        accelerate   = 'x',
-        decelerate = 'z'
+        accelerate = 'x',
+        decelerate = 'z',
+        flip       = 'a'
     }
 }
 

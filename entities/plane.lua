@@ -84,6 +84,7 @@ local max_motorPower = ENGINE_MAX
 local head_area = 1.0
 local plane_area = 10.0
 local motor_speed_ratio = 80.0
+local flipping_speed = 1.0 / 0.5
 
 local out_of_bounds_coeff_multiplier = 10.0
 
@@ -438,6 +439,26 @@ Plane = Class{
 
 	local motorEffort = (self.motorPower / (math.max(fwd_vel, 100) + 1) - 1) / 2 + 1
 	self.motorSound:setPitch(motorEffort * self.motorPower / ENGINE_MAX + 0.5)
+
+	if self.flipping ~= nil then
+	    self.flipping = self.flipping + flipping_speed * dt
+	    local finished = self.flipping >= 1.0
+	    if finished then
+		self.flipping = 1.0
+	    end
+	    if self.goingRight then
+		self.orientationAngle = 180 * self.flipping
+	    else
+		self.orientationAngle = 180 + 180 * self.flipping
+		if self.orientationAngle >= 360 then
+		    self.orientationAngle = 0
+		end
+	    end
+	    if finished then
+		self.goingRight = not self.goingRight
+		self.flipping = nil
+	    end
+	end
     end;
 
     draw = function(self)
@@ -485,5 +506,11 @@ Plane = Class{
             end
         end
     end;
+
+    flip = function(self, down) 
+	if self.flipping == nil then
+	    self.flipping = 0
+	end
+    end
 }
 

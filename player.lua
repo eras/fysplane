@@ -21,6 +21,9 @@ Player = Class{
             end,
             decelerate = function(down)
                 self.plane:decelerate(down)
+            end,
+            flip = function(down)
+                self.plane:flip(down)
             end
         }
 
