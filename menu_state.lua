@@ -129,6 +129,7 @@ function menu_state:keypressed(key, unicode)
 	currentlyChosen.data.label.label = key
 	currentlyChosen:delete()
 	currentlyChosen = nil
+	save_settings()
     end
 end
 

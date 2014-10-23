@@ -1,6 +1,8 @@
 -- Game specific settings go here
 -- LÖVE settings should go to conf.lua
 
+dofile("table.lua")
+
 PIXELS_PER_METER = 8
 
 GRAVITY_X = 0
@@ -28,6 +30,15 @@ KEYMAP = {
         decelerate = 'z'
     }
 }
+
+function save_settings() 
+    table.save({KEYMAP = KEYMAP}, "fysplane.cfg")
+end
+
+if love.filesystem.isFile("fysplane.cfg") then
+    local m = table.load("fysplane.cfg")
+    KEYMAP = m.KEYMAP
+end
 
 PLANE_HEALTH = 500
 PLANE_DEFAULT_GUN = "vickers77"
