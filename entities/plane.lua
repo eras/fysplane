@@ -124,9 +124,11 @@ Plane = Class{
 	self.g = g
 	self.b = b
         self.level = level
-        self.xsize = 4.0 * PIXELS_PER_METER
-        self.ysize = 4.3 * PIXELS_PER_METER
-        self.shape = love.physics.newRectangleShape(self.xsize, self.ysize)
+        self.xsize = 52
+        self.ysize = 50
+	self.collisionXSize = 4.0 * PIXELS_PER_METER
+        self.collisionYSize = 3.5 * PIXELS_PER_METER
+        self.shape = love.physics.newRectangleShape(0, -4, self.collisionXSize, self.collisionYSize)
         PhysicsEntity.attachShape(self, density)
         self.body:setX(self.x + self.xsize / 2)
         self.body:setY(self.y - self.ysize / 2)
