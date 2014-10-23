@@ -30,6 +30,7 @@ Turn CCW: " .. KEYMAP[1]['ccw'] .. "\
 Shoot: " .. KEYMAP[1]['shoot'] .. "\
 Engine power up: " .. KEYMAP[1]['accelerate'] .. "\
 Engine power down: " .. KEYMAP[1]['decelerate'] .. "\
+Flip: " .. KEYMAP[1]['flip'] .. "\
 ", 40, 400, 400, "left")
 
     love.graphics.printf("PLAYER 2\
@@ -39,6 +40,7 @@ Turn CCW: " .. KEYMAP[2]['ccw'] .. "\
 Shoot: " .. KEYMAP[2]['shoot'] .. "\
 Engine power up: " .. KEYMAP[2]['accelerate'] .. "\
 Engine power down: " .. KEYMAP[2]['decelerate'] .. "\
+Flip: " .. KEYMAP[2]['flip'] .. "\
 ", love.window.getWidth() - 40 - 400, 400, 400, "left")
 
     love.graphics.printf("PRESS ANY KEY TO BEGIN…", 0, 700, love.window.getWidth(), "center")
