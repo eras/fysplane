@@ -162,6 +162,12 @@ Plane = Class{
         self.motorSound:rewind()
         self.motorSound:play()
 	self.motorSound:setLooping(true)
+
+	if self.goingRight then
+	    self.orientationAngle = 0
+	else
+	    self.orientationAngle = 180
+	end
     end;
 
     receiveDamage = function(self, amount)
@@ -440,15 +446,9 @@ Plane = Class{
             love.graphics.push()
 
 	    love.graphics.setColor(self.r, self.g, self.b);
-            if self.goingRight then
-                love.graphics.translate(self.body:getX(), self.body:getY())
-                love.graphics.scale(-1, 1)
-                love.graphics.draw(self.frames[math.floor(self.orientationAngle / 10.0)], self.quad, 0, 0, -self.angle, 1, 1, self.xsize / 2, self.ysize / 2)
-            else
-                love.graphics.translate(self.body:getX(), self.body:getY())
-                love.graphics.scale(-1, -1)
-                love.graphics.draw(self.frames[math.floor(self.orientationAngle / 10.0)], self.quad, 0, 0, self.angle, 1, 1, self.xsize / 2, self.ysize / 2)
-            end
+	    love.graphics.translate(self.body:getX(), self.body:getY())
+	    love.graphics.scale(-1, 1)
+	    love.graphics.draw(self.frames[math.floor(self.orientationAngle / 10.0)], self.quad, 0, 0, -self.angle, 1, 1, self.xsize / 2, self.ysize / 2)
 
             love.graphics.pop()
 
