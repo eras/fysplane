@@ -1,7 +1,7 @@
 class = require 'hump.class'
 VectorLight = require 'hump/vector-light'
 
-local scale = 10
+local scale = 0.001
 
 local font = love.graphics.newFont(10)
 
