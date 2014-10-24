@@ -122,6 +122,9 @@ function menu_state:keypressed(key, unicode)
 	currentlyChosen:delete()
 	currentlyChosen = nil
     else
+	if key == "backspace" then
+	    key = "none"
+	end
 	KEYMAP[currentlyChosen.data.player][currentlyChosen.data.key][currentlyChosen.data.bindingIdx] = key
 	currentlyChosen.data.label.label = key
 	currentlyChosen:delete()
