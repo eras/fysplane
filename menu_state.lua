@@ -92,23 +92,16 @@ end
 function menu_state:update(dt)
     menuTime = menuTime + dt
 
-    local buttons
-    for i, joystick in ipairs(love.joystick.getJoysticks()) do
-	local jButtons = getJoystickButtons(joystick)
-	if buttons == nil then
-	    buttons = jButtons
-	else
-	    for j = 1, #buttons, 1 do
-		buttons[j] = buttons[j] or jButtons[i]
-	    end
-	end
-    end
-
     if currentlyChosen ~= nil then
 	local button = nil
-	for i = 1, #buttons, 1 do
-	    if buttons[i] then
-		button = i
+	local joysticks = love.joystick.getJoysticks()
+	if #joysticks >= currentlyChosen.data.player then
+	    local buttons = getJoystickButtons(joysticks[currentlyChosen.data.player])
+
+	    for i = 1, #buttons, 1 do
+		if buttons[i] then
+		    button = i
+		end
 	    end
 	end
 
