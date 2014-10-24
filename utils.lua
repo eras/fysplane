@@ -87,3 +87,18 @@ end
 function colorNAKKIVENE(color100, color0, ratio)
     return ratio * color100 + (1 - ratio) * color0
 end
+
+function getJoystickButtons(j)
+    local buttons = {}
+    for i = 1, j:getButtonCount(), 1 do
+	buttons[#buttons + 1] = j:isDown(i)
+    end
+    local hatDirs = {"u", "r", "d", "l"}
+    for i = 1, j:getHatCount(), 1 do
+	local hat = j:getHat(i)
+	for j = 1, #hatDirs, 1 do
+	    buttons[#buttons + 1] = hatDirs[j] == hat
+	end
+    end
+    return buttons
+end

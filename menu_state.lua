@@ -3,6 +3,7 @@ require 'level_state'
 require 'settings'
 require 'entities/label'
 require 'entities/valuecontroller'
+require 'utils'
 
 menu_state = {}
 
@@ -91,6 +92,37 @@ end
 function menu_state:update(dt)
     menuTime = menuTime + dt
 
+    local buttons
+    for i, joystick in ipairs(love.joystick.getJoysticks()) do
+	local jButtons = getJoystickButtons(joystick)
+	if buttons == nil then
+	    buttons = jButtons
+	else
+	    for j = 1, #buttons, 1 do
+		buttons[j] = buttons[j] or jButtons[i]
+	    end
+	end
+    end
+
+    if currentlyChosen ~= nil then
+	local button = nil
+	for i = 1, #buttons, 1 do
+	    if buttons[i] then
+		button = i
+	    end
+	end
+
+	if button ~= nil then
+	    local key = string.format("button%d", button)
+	    KEYMAP[currentlyChosen.data.player][currentlyChosen.data.key][currentlyChosen.data.bindingIdx] = key
+	    currentlyChosen.data.label.label = key
+	    currentlyChosen:delete()
+	    currentlyChosen = nil
+	    save_settings()
+	end
+    end
+
+
     for key, entity in pairs(menu_state.entity_list) do
         if entity.update then
 	    entity:update(dt)
@@ -139,15 +171,6 @@ function menu_state:keyreleased(key, unicode)
 end
 
 function menu_state:joystickpressed(key, button)
-    if currentlyChosen == nil then
-    else
-	local key = string.format("button%d", button)
-	KEYMAP[currentlyChosen.data.player][currentlyChosen.data.key][currentlyChosen.data.bindingIdx] = key
-	currentlyChosen.data.label.label = key
-	currentlyChosen:delete()
-	currentlyChosen = nil
-	save_settings()
-    end
 end
 
 

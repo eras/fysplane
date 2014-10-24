@@ -12,6 +12,7 @@ require 'entities/debug'
 require 'chaingunmode'
 require 'entities/plane'
 require 'machinegun'
+require 'utils'
 
 level_state = {}
 
@@ -111,10 +112,7 @@ function level_state:update(dt)
     for player = 1, #players, 1 do
 	local j = joysticks[player]
 	if j then
-	    local buttons = {}
-	    for i = 1, j:getButtonCount(), 1 do
-		buttons[i] = j:isDown(i)
-	    end
+	    local buttons = getJoystickButtons(j)
 	    if lastJoystickButtons[player] ~= nil then
 		for i = 1, #buttons, 1 do
 		    if buttons[i] ~= lastJoystickButtons[player][i] then
