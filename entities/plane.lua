@@ -306,7 +306,7 @@ Plane = Class{
         if self.accelerating then 
             self.motorPower = math.min(max_motorPower, self.motorPower + dt * accel_speed)
         end
-        if self.decelerating or self.brake then
+        if self.decelerating then
             self.motorPower = math.max(0.0, self.motorPower - dt * decel_speed)
         end
 	self.motorPower = math.max(0.0, math.min(max_motorPower, self.motorPower + dt * self.throttleY * accel_speed))
@@ -499,25 +499,11 @@ Plane = Class{
         self.turningCcw = isTurning
     end;
 
-    analog = function(self, controlY, throttleX, throttleY, fire, brake)
+    analog = function(self, controlY, throttleX, throttleY)
         if self.health > 0 then
 	    self.controlY = controlY
 	    self.throttleX = throttleX
 	    self.throttleY = -throttleY
-	    self.fire = fire
-	    self.brake = brake
-
-            if fire then
-		if not self.kbdShooting and not self.joyShooting then
-		    self.machinegun:startShooting()
-		end
-		self.joyShooting = true
-            else
-		self.joyShooting = false
-		if not self.kbdShooting and not self.joyShooting then
-		    self.machinegun:stopShooting()
-		end
-            end
         end
     end;
 

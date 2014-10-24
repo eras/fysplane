@@ -20,6 +20,8 @@ local players = {
     [2] = Player(2, 'Nicd')
 }
 
+local lastJoystickButtons = { nil, nil }
+
 local scoreboards = {}
 
 local level_music = nil
@@ -113,10 +115,22 @@ function level_state:update(dt)
 	    for i = 1, j:getButtonCount(), 1 do
 		buttons[i] = j:isDown(i)
 	    end
+	    if lastJoystickButtons[player] ~= nil then
+		for i = 1, #buttons, 1 do
+		    if buttons[i] ~= lastJoystickButtons[player][i] then
+			local key = string.format("button%d", i)
+			if buttons[i] then
+			    players[player]:press(key)
+			else
+			    players[player]:release(key)
+			end
+		    end
+		end
+	    end
+	    lastJoystickButtons[player] = buttons
 	    local x1, y1, x2, y2 = j:getAxes()
-	    if #buttons >= 8 and y2 ~= nil then
-		-- button mapping suitable for XBox original controller
-		players[player]:joystick(y2 - x2, x1, y1, buttons[8], buttons[7])
+	    if y2 ~= nil then
+		players[player]:joystick(y2 - x2, x1, y1)
 	    end
 	end
     end
