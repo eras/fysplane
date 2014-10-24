@@ -135,6 +135,18 @@ function menu_state:keyreleased(key, unicode)
 
 end
 
+function menu_state:joystickpressed(key, button)
+    if currentlyChosen == nil then
+    else
+	local key = string.format("button%d", button)
+	KEYMAP[currentlyChosen.data.player][currentlyChosen.data.key][currentlyChosen.data.bindingIdx] = key
+	currentlyChosen.data.label.label = key
+	currentlyChosen:delete()
+	currentlyChosen = nil
+	save_settings()
+    end
+end
+
 
 function menu_state:mousepressed(x, y, button)
     for key, entity in pairs(menu_state.entity_list) do

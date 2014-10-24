@@ -16,18 +16,18 @@ KEYMAP = {
         ccw        = { 'k' },
         cw         = { 'l' },
         flip       = { ',' },
-        shoot      = { 'o' },
+        shoot      = { 'o', 'button8' },
         accelerate = { 'j' },
-        decelerate = { 'm' }
+        decelerate = { 'm', 'button7' }
     },
 
     [2] = {
         ccw        = { 'a' },
         cw         = { 's' },
         flip       = { 'a' },
-        shoot      = { 'w' },
+        shoot      = { 'w', 'button8' },
         accelerate = { 'x' },
-        decelerate = { 'z' }
+        decelerate = { 'z', 'button7' }
     }
 }
 
