@@ -36,14 +36,13 @@ function menu_state:enter()
 	Label(string.format("Player %d", player), midfont, { 255, 255, 255, 255 }, "left", 500, 0, x, y, menu_state)
 	y = y + 60
 	for idx, key in ipairs(bindingOrder) do
-	    local binding = KEYMAP[player][key]
-	    local l1 = Label(bindingName[key], font, { 255, 255, 255, 255 }, "left", 190, 25, x, y, menu_state)
-	    local l2 = Label(binding, font, { 255, 255, 255, 255 }, "left", 50, 25, x + 200, y, menu_state)
-	    local adjust = function()
-		menu_state:adjustBindings(l1, l2, player, key)
+	    Label(bindingName[key], font, { 255, 255, 255, 255 }, "left", 190, 25, x, y, menu_state)
+	    for bindingIdx, binding in ipairs(KEYMAP[player][key]) do
+		local label = Label(binding, font, { 255, 255, 255, 255 }, "left", 50, 25, x + 200 + 20 * (bindingIdx - 1), y, menu_state)
+		label:onClick(function()
+				  menu_state:adjustBindings(label, bindingIdx, player, key)
+			      end)
 	    end
-	    l1:onClick(adjust)
-	    l2:onClick(adjust)
 	    y = y + 30
 	end
 	x = x + 400
@@ -55,19 +54,17 @@ local blinkColor = function(t)
     return 255 * ((math.sin(math.pow((math.log(subseconds + 1) / math.log(2)), 2) * math.pi * 2) * 0.5 + 0.5));
 end
 
-function menu_state:adjustBindings(name, binding, player, key)
+function menu_state:adjustBindings(label, bindingIdx, player, key)
     if currentlyChosen ~= nil then
 	currentlyChosen:delete()
     end
 
     currentlyChosen = ValueController(function ()
-					  name.color[4] = blinkColor(); 
-					  binding.color[4] = blinkColor(); 
+					  label.color[4] = blinkColor(); 
 				      end, menu_state)
-    currentlyChosen.data = { name = name, binding = binding, player = player, key = key, label = binding }
+    currentlyChosen.data = { bindingIdx = bindingIdx, player = player, key = key, label = label }
     currentlyChosen.onDelete = function()
-	name.color[4] = 255; 
-	binding.color[4] = 255; 
+	label.color[4] = 255; 
     end
 end
 
@@ -125,7 +122,7 @@ function menu_state:keypressed(key, unicode)
 	currentlyChosen:delete()
 	currentlyChosen = nil
     else
-	KEYMAP[currentlyChosen.data.player][currentlyChosen.data.key] = key
+	KEYMAP[currentlyChosen.data.player][currentlyChosen.data.key][currentlyChosen.data.bindingIdx] = key
 	currentlyChosen.data.label.label = key
 	currentlyChosen:delete()
 	currentlyChosen = nil

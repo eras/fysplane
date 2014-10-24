@@ -51,30 +51,27 @@ Player = Class{
     update = function(self, dt)
     end;
 
-    press = function(self, key)
+    pressDown = function(self, key, down)
 	local found = false
-        for action, keycode in pairs(self.keys) do
-            if key == keycode then
-		found = true
-                if self.actions[action] and self.plane then
-                    self.actions[action](true)
-                end
-            end
+        for action, bindings in pairs(self.keys) do
+	    for idx, keycode in pairs(bindings) do
+		if key == keycode then
+		    found = true
+		    if self.actions[action] and self.plane then
+			self.actions[action](down)
+		    end
+		end
+	    end
         end
 	return found
     end;
 
+    press = function(self, key)
+	return self:pressDown(key, true)
+    end;
+
     release = function(self, key)
-	local found = false
-        for action, keycode in pairs(self.keys) do
-            if key == keycode then
-		found = true
-                if self.actions[action] and self.plane then
-                    self.actions[action](false)
-                end
-            end
-        end
-	return found
+	return self:pressDown(key, false)
     end;
 
     joystick = function(self, ...)

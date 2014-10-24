@@ -13,21 +13,21 @@ HEIGHT = 768
 
 KEYMAP = {
     [1] = {
-        ccw        = 'k',
-        cw         = 'l',
-        flip       = ',',
-        shoot      = 'o',
-        accelerate = 'j',
-        decelerate = 'm'
+        ccw        = { 'k' },
+        cw         = { 'l' },
+        flip       = { ',' },
+        shoot      = { 'o' },
+        accelerate = { 'j' },
+        decelerate = { 'm' }
     },
 
     [2] = {
-        ccw        = 'a',
-        cw         = 's',
-        flip       = 'a',
-        shoot      = 'w',
-        accelerate = 'x',
-        decelerate = 'z'
+        ccw        = { 'a' },
+        cw         = { 's' },
+        flip       = { 'a' },
+        shoot      = { 'w' },
+        accelerate = { 'x' },
+        decelerate = { 'z' }
     }
 }
 
