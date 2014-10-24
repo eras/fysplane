@@ -39,14 +39,14 @@ function menu_state:enter()
 	for idx, key in ipairs(bindingOrder) do
 	    Label(bindingName[key], font, { 255, 255, 255, 255 }, "left", 190, 25, x, y, menu_state)
 	    for bindingIdx, binding in ipairs(KEYMAP[player][key]) do
-		local label = Label(binding, font, { 255, 255, 255, 255 }, "left", 50, 25, x + 200 + 20 * (bindingIdx - 1), y, menu_state)
+		local label = Label(binding, font, { 255, 255, 255, 255 }, "center", 100, 25, x + 200 + 100 * (bindingIdx - 1), y, menu_state)
 		label:onClick(function()
 				  menu_state:adjustBindings(label, bindingIdx, player, key)
 			      end)
 	    end
 	    y = y + 30
 	end
-	x = x + 400
+	x = x + 500
     end
 end
 
