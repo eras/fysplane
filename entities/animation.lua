@@ -22,6 +22,8 @@ Animation = Class{
     __includes = Entity,
 
     curFrame = 0,
+    velX = 0,
+    velY = 0,
 
     init = function(self, x, y, level, frames)
         Entity.init(self, x, y, level)
@@ -30,6 +32,11 @@ Animation = Class{
         self.angle = 0
         self.x = x
         self.y = y
+    end;
+
+    setVelocity = function(self, velX, velY)
+	self.velX = velX
+	self.velY = velY
     end;
 
     draw = function(self)
@@ -49,5 +56,7 @@ Animation = Class{
         if self.curFrame >= self.frames.numFrames then
             self:delete()
         end
+	self.x = self.x + self.velX * dt
+	self.y = self.y + self.velY * dt
     end;
 }

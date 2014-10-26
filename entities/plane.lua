@@ -188,7 +188,11 @@ Plane = Class{
 	end
 	self.joyShooting = false
 	self.kbdShooting = false
-        Animation(self.body:getX(), self.body:getY(), self.level, explosionFrames)
+        local animation = Animation(self.body:getX(), self.body:getY(), self.level, explosionFrames)
+	if not self.contactingGround then
+	    local velX, velY = self.body:getLinearVelocity()
+	    animation:setVelocity(velX, velY)
+	end
         self:getOwner():setPlane(nil)
 	self.motorSound:stop()
         self:delete()
