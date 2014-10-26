@@ -57,7 +57,7 @@ if love.filesystem.isFile("fysplane.cfg") then
     AXISMAP = m.AXISMAP
 end
 
-PLANE_HEALTH = 500
+PLANE_HEALTH = 200
 PLANE_DEFAULT_GUN = "vickers77"
 
 SCOREBOARD_WIDTH = 250
