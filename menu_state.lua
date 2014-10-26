@@ -87,8 +87,11 @@ function menu_state:enter()
 				    local joysticks = love.joystick.getJoysticks()
 				    local axisIdx = AXISMAP[player][axis][bindingIdx].axis
 				    if #joysticks >= player then
-					local direction = joysticks[player]:getAxis(axisIdx)
-					visAxis.x = visAxisBaseX + 30 * direction
+					local j = joysticks[player]
+					if axisIdx > 0 and axisIdx <= j:getAxisCount() then
+					    local direction = j:getAxis(axisIdx)
+					    visAxis.x = visAxisBaseX + 30 * direction
+					end
 				    end
 				end, menu_state)
 	    end
@@ -112,7 +115,7 @@ function menu_state:switchAxis(player, axis, bindingIdx)
 
 	axisIdx = axisIdx + 1
 	if axisIdx > joystick:getAxisCount() then
-	    axisIdx = 1
+	    axisIdx = 0
 	end
 
 	AXISMAP[player][axis][bindingIdx].axis = axisIdx
