@@ -102,3 +102,22 @@ function getJoystickButtons(j)
     end
     return buttons
 end
+
+function getJoystickAxis(joystick, info)
+    local value = 0
+    if info.axis > 0 and joystick:getAxisCount() >= info.axis then
+	value = joystick:getAxis(info.axis)
+	if info.flipped then
+	    value = -value
+	end
+    end
+    return value
+end
+
+function getRotation(joystick, player)
+    return getJoystickAxis(joystick, AXISMAP[player].rotation[1]) + getJoystickAxis(joystick, AXISMAP[player].rotation[2])	
+end
+
+function getThrottle(joystick, player)
+    return getJoystickAxis(joystick, AXISMAP[player].throttle[1]) + getJoystickAxis(joystick, AXISMAP[player].throttle[2])
+end

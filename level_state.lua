@@ -138,9 +138,7 @@ function level_state:update(dt)
 		return value
 	    end
 	    
-	    local rotation = getAxis(AXISMAP[player].rotation[1]) + getAxis(AXISMAP[player].rotation[2])
-	    local throttle = getAxis(AXISMAP[player].throttle[1]) + getAxis(AXISMAP[player].throttle[2])
-	    players[player]:joystick(rotation, throttle)
+	    players[player]:joystick(getRotation(j, player), getThrottle(j, player))
 	end
     end
     
