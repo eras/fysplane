@@ -196,6 +196,11 @@ Plane = Class{
         self:getOwner():setPlane(nil)
 	self.motorSound:stop()
         self:delete()
+
+	if self.outOfBoundsArrow then
+	    self.outOfBoundsArrow:delete()
+	    self.outOfBoundsArrow = nil
+	end
     end;
 
     delete = function(self)
