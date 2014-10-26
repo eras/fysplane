@@ -25,7 +25,11 @@ Label = Class {
 	love.graphics.setColor(self.color)
 	love.graphics.translate(self.x, self.y)
 	love.graphics.setFont(self.font)
-	love.graphics.printf(self.label, 0, 0, self.xsize, self.align)
+	local label = self.label
+	if type(label) == "function" then
+	    label = label()
+	end
+	love.graphics.printf(label, 0, 0, self.xsize, self.align)
 	--love.graphics.rectangle("fill", 0, 0, self.xsize, self.ysize)
 	love.graphics.pop()
     end;

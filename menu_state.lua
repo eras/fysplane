@@ -47,7 +47,8 @@ function menu_state:enter()
 	for idx, key in ipairs(bindingOrder) do
 	    Label(bindingInfo[key], font, { 255, 255, 255, 255 }, "left", 190, 25, x, y, menu_state)
 	    for bindingIdx, binding in ipairs(KEYMAP[player][key]) do
-		local label = Label(binding, font, { 255, 255, 255, 255 }, "center", 100, 25, x + 200 + 100 * (bindingIdx - 1), y, menu_state)
+		local label = Label(function() return KEYMAP[player][key][bindingIdx] end,
+				    font, { 255, 255, 255, 255 }, "center", 100, 25, x + 200 + 100 * (bindingIdx - 1), y, menu_state)
 		label:onClick(function()
 				  menu_state:adjustBindings(label, bindingIdx, player, key)
 			      end)
@@ -58,24 +59,26 @@ function menu_state:enter()
 	    local axisInfo = AXISMAP[player][axis]
 	    Label(joyBindingInfo[axis], font, { 255, 255, 255, 255 }, "left", 190, 25, x, y, menu_state)
 	    for bindingIdx, info in ipairs(axisInfo) do
-		local prefix
-		if info.flipped then
-		    prefix = "-"
-		else
-		    prefix = "+"
-		end
 		local visAxisBaseX = (100 + 30) / 2 + x + 200 + 100 * (bindingIdx - 1)
 
-		local signLabel = Label(prefix, font, { 255, 255, 255, 255 }, "center", 20, 25, x + 200 + 100 * (bindingIdx - 1), y, menu_state)
+		local signLabel = Label(function() 
+					    if AXISMAP[player][axis][bindingIdx].flipped then
+						return "-"
+					    else
+						return "+"
+					    end
+					end, font, { 255, 255, 255, 255 }, "center", 20, 25, x + 200 + 100 * (bindingIdx - 1), y, menu_state)
 
 		signLabel:onClick(function()
-				      menu_state:switchSign(player, axis, bindingIdx, signLabel)
+				      menu_state:switchSign(player, axis, bindingIdx)
 				  end)
 
-		local axisLabel = Label(info.axis, font, { 255, 255, 255, 255 }, "center", 70, 25, x + 30 + 200 + 100 * (bindingIdx - 1), y, menu_state)
+		local axisLabel = Label(function()
+					    return AXISMAP[player][axis][bindingIdx].axis
+					end, font, { 255, 255, 255, 255 }, "center", 70, 25, x + 30 + 200 + 100 * (bindingIdx - 1), y, menu_state)
 
 		axisLabel:onClick(function()
-				      menu_state:switchAxis(player, axis, bindingIdx, axisLabel)
+				      menu_state:switchAxis(player, axis, bindingIdx)
 				  end)
 
 		local visAxis = VisRectangle({ 40, 40, 0, 128 },  10, 10, nil, visAxisBaseX, y + 11, menu_state)
@@ -95,19 +98,12 @@ function menu_state:enter()
     end
 end
 
-function menu_state:switchSign(player, axis, bindingIdx, signLabel)
+function menu_state:switchSign(player, axis, bindingIdx)
     AXISMAP[player][axis][bindingIdx].flipped = not AXISMAP[player][axis][bindingIdx].flipped 
-    local prefix;
-    if AXISMAP[player][axis][bindingIdx].flipped then
-	prefix = "-"
-    else
-	prefix = "+"
-    end
-    signLabel.label = prefix
     save_settings()
 end
 
-function menu_state:switchAxis(player, axis, bindingIdx, axisLabel)
+function menu_state:switchAxis(player, axis, bindingIdx)
     local joysticks = love.joystick.getJoysticks()
 
     if #joysticks >= player then
@@ -115,13 +111,11 @@ function menu_state:switchAxis(player, axis, bindingIdx, axisLabel)
 	local axisIdx = AXISMAP[player][axis][bindingIdx].axis
 
 	axisIdx = axisIdx + 1
-
 	if axisIdx > joystick:getAxisCount() then
 	    axisIdx = 1
 	end
 
 	AXISMAP[player][axis][bindingIdx].axis = axisIdx
-	axisLabel.label = AXISMAP[player][axis][bindingIdx].axis
 	save_settings()
     end
 end
@@ -227,7 +221,6 @@ function menu_state:keypressed(key, unicode)
 	    key = "none"
 	end
 	KEYMAP[currentlyChosen.data.player][currentlyChosen.data.key][currentlyChosen.data.bindingIdx] = key
-	currentlyChosen.data.label.label = key
 	currentlyChosen:delete()
 	currentlyChosen = nil
 	save_settings()
