@@ -150,8 +150,8 @@ function level_state:update(dt)
 	local r = love.math.random()
 
 	if r <= POWERUP_POSSIBILITY * dt then
-	    local x = love.math.random(WIDTH)
-	    local y = love.math.random(HEIGHT)
+	    local x = love.math.random(levelWidth())
+	    local y = love.math.random(levelHeight())
 
 	    POWERUPS[love.math.random(1, #POWERUPS)](x, y, current_level)
 	end

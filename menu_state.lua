@@ -144,7 +144,10 @@ end
 
 function menu_state:draw()
     love.graphics.setColor(128, 128, 128, 255)
-    love.graphics.draw(background)
+    love.graphics.draw(background, 0, 0, 0,
+		       levelWidth() / background:getWidth(),
+		       levelHeight() / background:getHeight())
+
 
     local seconds, subseconds = math.modf(menuTime)
 

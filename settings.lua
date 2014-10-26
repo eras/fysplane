@@ -8,8 +8,8 @@ PIXELS_PER_METER = 8
 GRAVITY_X = 0
 GRAVITY_Y = 9.82599 * PIXELS_PER_METER
 
-WIDTH = 1280
-HEIGHT = 768
+INITIAL_WIDTH = 1280
+INITIAL_HEIGHT = 768
 
 KEYMAP = {
     [1] = {
@@ -55,6 +55,16 @@ if love.filesystem.isFile("fysplane.cfg") then
     local m = table.load("fysplane.cfg")
     KEYMAP = m.KEYMAP
     AXISMAP = m.AXISMAP
+end
+
+function levelWidth()
+    local width, height = love.window.getMode()
+    return width
+end
+
+function levelHeight()
+    local width, height = love.window.getMode()
+    return height
 end
 
 PLANE_HEALTH = 200

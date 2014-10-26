@@ -1,5 +1,6 @@
 Class = require 'hump.class'
 require 'entities/rectangle'
+require 'utils'
 
 Ground = Class{
     __includes = Rectangle,
@@ -7,10 +8,15 @@ Ground = Class{
     init = function(self, level)
         local groundImg = love.graphics.newImage('resources/graphics/ground.png')
         Rectangle.init(self,
-		       (love.window.getWidth() - 1600) / 2, love.window.getHeight(),
+		       -200, levelHeight(),
 		       level, "static",
-		       0, 1600, 20, 0, groundImg)
+		       0,
+		       levelWidth() + 400, 20, 0, groundImg)
 	self.fixture:setRestitution(0)
 	self.fixture:setFriction(0.5)
+    end;
+
+    update = function(self, dt)
+	self.body:setY(levelHeight() - 10)
     end;
 }
