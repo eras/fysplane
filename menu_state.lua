@@ -3,6 +3,7 @@ require 'level_state'
 require 'settings'
 require 'entities/label'
 require 'entities/valuecontroller'
+require 'entities/visrectangle'
 require 'utils'
 
 menu_state = {}
@@ -16,7 +17,7 @@ local menuTime = 0
 
 local currentlyChosen = nil
 
-local bindingName = {
+local bindingInfo = {
     ccw	       = "Turn CW",
     cw	       = "Turn CCW",
     shoot      = "Shoot",
@@ -25,7 +26,14 @@ local bindingName = {
     flip       = "Flip"
 }
 
+local joyBindingInfo = {
+    rotation  = "Turn",
+    throttle  = "Engine power"
+}
+
 local bindingOrder = { "ccw", "cw", "shoot", "accelerate", "decelerate", "flip" }
+
+local joyBindingOrder = { "rotation", "throttle" }
 
 function menu_state:enter()
     menu_state.entity_list = {}
@@ -37,7 +45,7 @@ function menu_state:enter()
 	Label(string.format("Player %d", player), midfont, { 255, 255, 255, 255 }, "left", 500, 0, x, y, menu_state)
 	y = y + 60
 	for idx, key in ipairs(bindingOrder) do
-	    Label(bindingName[key], font, { 255, 255, 255, 255 }, "left", 190, 25, x, y, menu_state)
+	    Label(bindingInfo[key], font, { 255, 255, 255, 255 }, "left", 190, 25, x, y, menu_state)
 	    for bindingIdx, binding in ipairs(KEYMAP[player][key]) do
 		local label = Label(binding, font, { 255, 255, 255, 255 }, "center", 100, 25, x + 200 + 100 * (bindingIdx - 1), y, menu_state)
 		label:onClick(function()
@@ -46,7 +54,75 @@ function menu_state:enter()
 	    end
 	    y = y + 30
 	end
+	for idx, axis in ipairs(joyBindingOrder) do
+	    local axisInfo = AXISMAP[player][axis]
+	    Label(joyBindingInfo[axis], font, { 255, 255, 255, 255 }, "left", 190, 25, x, y, menu_state)
+	    for bindingIdx, info in ipairs(axisInfo) do
+		local prefix
+		if info.flipped then
+		    prefix = "-"
+		else
+		    prefix = "+"
+		end
+		local visAxisBaseX = (100 + 30) / 2 + x + 200 + 100 * (bindingIdx - 1)
+
+		local signLabel = Label(prefix, font, { 255, 255, 255, 255 }, "center", 20, 25, x + 200 + 100 * (bindingIdx - 1), y, menu_state)
+
+		signLabel:onClick(function()
+				      menu_state:switchSign(player, axis, bindingIdx, signLabel)
+				  end)
+
+		local axisLabel = Label(info.axis, font, { 255, 255, 255, 255 }, "center", 70, 25, x + 30 + 200 + 100 * (bindingIdx - 1), y, menu_state)
+
+		axisLabel:onClick(function()
+				      menu_state:switchAxis(player, axis, bindingIdx, axisLabel)
+				  end)
+
+		local visAxis = VisRectangle({ 40, 40, 0, 128 },  10, 10, nil, visAxisBaseX, y + 11, menu_state)
+
+		ValueController(function ()
+				    local joysticks = love.joystick.getJoysticks()
+				    local axisIdx = AXISMAP[player][axis][bindingIdx].axis
+				    if #joysticks >= player then
+					local direction = joysticks[player]:getAxis(axisIdx)
+					visAxis.x = visAxisBaseX + 30 * direction
+				    end
+				end, menu_state)
+	    end
+	    y = y + 30
+	end
 	x = x + 500
+    end
+end
+
+function menu_state:switchSign(player, axis, bindingIdx, signLabel)
+    AXISMAP[player][axis][bindingIdx].flipped = not AXISMAP[player][axis][bindingIdx].flipped 
+    local prefix;
+    if AXISMAP[player][axis][bindingIdx].flipped then
+	prefix = "-"
+    else
+	prefix = "+"
+    end
+    signLabel.label = prefix
+    save_settings()
+end
+
+function menu_state:switchAxis(player, axis, bindingIdx, axisLabel)
+    local joysticks = love.joystick.getJoysticks()
+
+    if #joysticks >= player then
+	local joystick = joysticks[player]
+	local axisIdx = AXISMAP[player][axis][bindingIdx].axis
+
+	axisIdx = axisIdx + 1
+
+	if axisIdx > joystick:getAxisCount() then
+	    axisIdx = 1
+	end
+
+	AXISMAP[player][axis][bindingIdx].axis = axisIdx
+	axisLabel.label = AXISMAP[player][axis][bindingIdx].axis
+	save_settings()
     end
 end
 

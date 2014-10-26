@@ -109,10 +109,8 @@ Plane = Class{
 
     orientationAngle = 0,
 
-    controlX = 0,
-    controlY = 0,
-    throttleX = 0,
-    throttleY = 0,
+    rotation = 0,
+    throttle = 0,
 
     kbdShooting = false,
     joyShooting = false,
@@ -309,7 +307,7 @@ Plane = Class{
         if self.decelerating then
             self.motorPower = math.max(0.0, self.motorPower - dt * decel_speed)
         end
-	self.motorPower = math.max(0.0, math.min(max_motorPower, self.motorPower + dt * self.throttleY * accel_speed))
+	self.motorPower = math.max(0.0, math.min(max_motorPower, self.motorPower + dt * self.throttle * accel_speed))
 
         -- -- local base = 
         -- let base = V.base (V.vec_of_ang (~-(body#get_angle))) in
@@ -429,7 +427,7 @@ Plane = Class{
         elseif self.turningCw then
             dy = -1
 	else
-	    dy = self.controlY
+	    dy = self.rotation
         end
         if dy ~= 0 then 
             dx, dy = VectorLight.mul(fwd_vel * turn_coeff, 0, dy)
@@ -499,11 +497,10 @@ Plane = Class{
         self.turningCcw = isTurning
     end;
 
-    analog = function(self, controlY, throttleX, throttleY)
+    analog = function(self, rotation, throttle)
         if self.health > 0 then
-	    self.controlY = controlY
-	    self.throttleX = throttleX
-	    self.throttleY = -throttleY
+	    self.rotation = rotation
+	    self.throttle = throttle
         end
     end;
 

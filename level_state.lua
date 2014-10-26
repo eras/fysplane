@@ -126,10 +126,21 @@ function level_state:update(dt)
 		end
 	    end
 	    lastJoystickButtons[player] = buttons
-	    local x1, y1, x2, y2 = j:getAxes()
-	    if y2 ~= nil then
-		players[player]:joystick(y2 - x2, x1, y1)
+
+	    local getAxis = function(info)
+		local value = 0
+		if j:getAxisCount() >= info.axis then
+		    value = j:getAxis(info.axis)
+		    if info.flipped then
+			value = -value
+		    end
+		end
+		return value
 	    end
+	    
+	    local rotation = getAxis(AXISMAP[player].rotation[1]) + getAxis(AXISMAP[player].rotation[2])
+	    local throttle = getAxis(AXISMAP[player].throttle[1]) + getAxis(AXISMAP[player].throttle[2])
+	    players[player]:joystick(rotation, throttle)
 	end
     end
     

@@ -31,13 +31,30 @@ KEYMAP = {
     }
 }
 
+AXISMAP = {
+    [1] = {
+	rotation  = { { flipped = true,  axis = 3 }, 
+		      { flipped = false, axis = 4 } },
+	throttle  = { { flipped = false, axis = 1 }, 
+		      { flipped = false, axis = 2 } },
+    },
+    [2] = {
+	rotation  = { { flipped = true,  axis = 3 }, 
+		      { flipped = false, axis = 4 } },
+	throttle  = { { flipped = false, axis = 1 }, 
+		      { flipped = false, axis = 2 } },
+    }
+}
+
+
 function save_settings() 
-    table.save({KEYMAP = KEYMAP}, "fysplane.cfg")
+    table.save({KEYMAP = KEYMAP, AXISMAP = AXISMAP}, "fysplane.cfg")
 end
 
 if love.filesystem.isFile("fysplane.cfg") then
     local m = table.load("fysplane.cfg")
     KEYMAP = m.KEYMAP
+    AXISMAP = m.AXISMAP
 end
 
 PLANE_HEALTH = 500
