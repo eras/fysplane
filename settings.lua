@@ -36,13 +36,13 @@ AXISMAP = {
 	rotation  = { { flipped = true,  axis = 3 }, 
 		      { flipped = false, axis = 4 } },
 	throttle  = { { flipped = false, axis = 1 }, 
-		      { flipped = false, axis = 2 } },
+		      { flipped = true,  axis = 2 } },
     },
     [2] = {
 	rotation  = { { flipped = true,  axis = 3 }, 
 		      { flipped = false, axis = 4 } },
 	throttle  = { { flipped = false, axis = 1 }, 
-		      { flipped = false, axis = 2 } },
+		      { flipped = true,  axis = 2 } },
     }
 }
 
