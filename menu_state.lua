@@ -38,7 +38,9 @@ local joyBindingOrder = { "rotation", "throttle" }
 function menu_state:enter()
     menu_state.entity_list = {}
     love.graphics.setBackgroundColor(0, 0, 0, 0)
-    
+
+    love.window.setMode(levelWidth(), levelHeight(), {resizable=true, vsync=true})
+
     local x = 40
     for player = 1, 2, 1 do
 	local y = 300
@@ -206,6 +208,7 @@ end
 
 
 function menu_state:keypressed(key, unicode)
+    love.window.setMode(levelWidth(), levelHeight(), {resizable=false, vsync=true})
     if currentlyChosen == nil then
 	if key == "1" then
 	    level_state.mode = "solo"
