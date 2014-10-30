@@ -158,7 +158,13 @@ function menu_state:draw()
 
     love.graphics.printf("FYSPLANE", 0, 100, love.window.getWidth(), "center")
 
-    love.graphics.printf("PRESS ANY KEY TO BEGIN…", 0, 700, love.window.getWidth(), "center")
+    love.graphics.setFont(midfont);
+    love.graphics.printf("1 for solo game", 0, 600, love.window.getWidth(), "center")
+    love.graphics.printf("2 for two-player game", 0, 630, love.window.getWidth(), "center")
+    love.graphics.printf("c for game against the computer", 0, 660, love.window.getWidth(), "center")
+
+    love.graphics.setFont(titlefont)
+    love.graphics.printf("PRESS SPACE TO BEGIN…", 0, 700, love.window.getWidth(), "center")
 
     for key, entity in pairs(menu_state.entity_list) do
         entity:draw()
@@ -221,7 +227,7 @@ function menu_state:keypressed(key, unicode)
 	    Gamestate.switch(level_state)
 	elseif key == "escape" then
 	    love.event.quit()
-	else
+	elseif key == " " then
 	    Gamestate.switch(level_state)
 	end
     elseif key == "escape" then
