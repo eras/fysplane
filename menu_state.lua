@@ -214,21 +214,24 @@ end
 
 
 function menu_state:keypressed(key, unicode)
-    love.window.setMode(levelWidth(), levelHeight(), {resizable=false, vsync=true})
     if currentlyChosen == nil then
+	local switchState = function(state)
+	    love.window.setMode(levelWidth(), levelHeight(), {resizable=false, vsync=true})
+	    Gamestate.switch(state)
+	end
 	if key == "1" then
 	    level_state.mode = "solo"
-	    Gamestate.switch(level_state)
+	    switchState(level_state)
 	elseif key == "c" then
 	    level_state.mode = "computer"
-	    Gamestate.switch(level_state)
+	    switchState(level_state)
 	elseif key == "2" then
 	    level_state.mode = "2player"
-	    Gamestate.switch(level_state)
+	    switchState(level_state)
 	elseif key == "escape" then
 	    love.event.quit()
 	elseif key == " " then
-	    Gamestate.switch(level_state)
+	    switchState(level_state)
 	end
     elseif key == "escape" then
 	currentlyChosen:delete()
