@@ -1,4 +1,8 @@
-Licensed under the terms of the MIT license found in LICENSE.MIT.
+Licensed under the terms of the MIT license found in LICENSE.MIT except for:
+
+matrix.lua: see matrix.LICENSE
+
+hump: see hump/README.md
 
 resources/audio/Beavis II.mp3 is licensed under XXX
 
