@@ -4,12 +4,14 @@ matrix.lua: see matrix.LICENSE
 
 hump: see hump/README.md
 
-resources/audio/Beavis II.mp3 is licensed under XXX
+resources/audio/Beavis II.mp3 made by Maf is licensed under CC-BY 3.0
+https://www.youtube.com/watch?v=MVl_FoPD34s
 
-resources/audio/chaingun.mp3 is licensed under XXX
+resources/audio/chaingun.mp3 and resources/audio/vickers77.mp3 are licensed under CC0
+https://www.facebook.com/freefirearmsfx
 
-resources/audio/vickers77.mp3 is licensed under XXX
+resources/audio/clangs/* made by bart are licensed under CC0
+http://opengameart.org/content/33-metal-clang-sounds-cast-iron-pans
 
-resources/audio/clangs/* is licensed under XXX
-
-resources/graphics/sky.png is licensed under XXX
+resources/graphics/sky.png made by bart is licenced under CC-BY 3.0
+http://opengameart.org/content/sky-backdrop
