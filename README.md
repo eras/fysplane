@@ -5,8 +5,8 @@
 ### Installation
 
 1. Get LÖVE 0.9.1 from your package manager or from http://love2d.org/.
-2. `git clone git@bitbucket.org:mikko_ahlroth/fysplane.git`.
-3. `cd /path/to/fysplane; love .` or drag the fysplane directory on LÖVE's Baby Inspector window.
+2. `git clone https://github.com/eras/fysplane.git`.
+3. `cd fysplane; love .` or drag the fysplane directory on LÖVE's Baby Inspector window.
 
 For Ubuntu you can find a PPA if you like to install random stuff from the Internet:
 
